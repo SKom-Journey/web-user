@@ -1,0 +1,1 @@
+export { Home } from "@/pages/core/client/home";
