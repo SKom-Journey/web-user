@@ -12,7 +12,7 @@ export const MenubarList = () => {
       <NavigationMenu>
          <NavigationMenuList className="gap-10">
             <NavigationMenuItem>
-               <Link to={"/home"}>
+               <Link to={"/menu"}>
                   <NavigationMenuLink className="me-3 text-center flex flex-col">
                      <HomeIcon />
                      <span className="text-xs pt-1 text-white">Home</span>
