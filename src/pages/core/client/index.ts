@@ -1,1 +1,1 @@
-export { Home } from "@/pages/core/client/home";
+export { Base } from "@/pages/core/client/base";
