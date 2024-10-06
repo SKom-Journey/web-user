@@ -1,5 +1,5 @@
-import { Menubar } from "@/components/Menubar"
-import { Navbar } from "@/components/Navbar"
+import { Menubar } from "@/components/base/menubar/Menubar"
+import { Navbar } from "@/components/base/navbar/Navbar"
 import { Outlet } from "react-router-dom"
 
 export const Base: React.FC = () => {

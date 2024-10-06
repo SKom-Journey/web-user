@@ -63,6 +63,7 @@
   body {
     @apply bg-background text-foreground;
     background-color: #F4F4F4;
+    font-family: "Manrope", sans-serif;
   }
   #wrapper{
     width: 480px;
