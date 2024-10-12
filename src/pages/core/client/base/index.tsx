@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
 
 const titleMapping: { [key: string]: string } = {
    '/menu': 'Menu',
-   '/chat': 'Chat',
+   '/chat': 'Chatbot',
    '/cart': 'Cart',
    '*': 'Not Found',
 };

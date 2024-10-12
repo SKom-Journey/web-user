@@ -5,7 +5,8 @@ import {
    NavigationMenuList,
 } from "@/components/ui/navigation-menu"
 import { Link } from "react-router-dom"
-import { CartIcon, CommentIcon, HomeIcon } from "@/components/Icons"
+import { CartIcon, HomeIcon } from "@/components/Icons";
+import ChatRed from "@/assets/images/chat_red.png";
 
 export const MenubarList = () => {
    return (
@@ -22,8 +23,10 @@ export const MenubarList = () => {
             <NavigationMenuItem>
                <Link to={"/chat"}>
                   <NavigationMenuLink className="me-3 text-center flex flex-col">
-                     <CommentIcon />
-                     <span className="text-xs pt-1 text-white">Chat</span>
+                     <center>
+                        <img width={23} src={ChatRed} alt="" />
+                     </center>
+                     <span className="text-xs pt-1 text-white">Chatbot</span>
                   </NavigationMenuLink>
                </Link>
             </NavigationMenuItem>
