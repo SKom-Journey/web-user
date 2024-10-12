@@ -1,5 +1,6 @@
 import { NotFound, Base } from "@/pages";
 import { MenuPage } from "@/pages/core/client/menus";
+import { ChatPage } from "@/pages/core/client/chat";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
          {
             path: '/menu',
             element: <MenuPage />,
+         },
+         {
+            path: '/chat',
+            element: <ChatPage />,
          },
          {
             path: '*',

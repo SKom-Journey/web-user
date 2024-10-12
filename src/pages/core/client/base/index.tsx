@@ -25,16 +25,20 @@ export const Base: React.FC = () => {
       }
    }, [contentRef]);
 
+   const hideMenubar = location.pathname === '/chat'
+
    return (
-      <main className="bg-white">
-         <div id="navbar" className="pb-20">
+      <main className="bg-white overflow-hidden">
+         <div id="navbar" className="pb-[4rem]">
             <Navbar title={title} />
          </div>
          <div id="content" className="p-5" ref={contentRef}>
             <Outlet />
          </div>
          <div id="menubar">
-            <Menubar />
+            {!hideMenubar && (
+               <Menubar />
+            )}
          </div>
       </main>
    );

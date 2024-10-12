@@ -4,7 +4,8 @@ import {
    faHome,
    faComment,
    faCartShopping,
-   faCirclePlus
+   faCirclePlus,
+   faPaperPlane
 } from '@fortawesome/free-solid-svg-icons'
 
 export const ArrowLeftIcon = () => <FontAwesomeIcon icon={faArrowLeft} />
@@ -12,3 +13,4 @@ export const CommentIcon = () => <FontAwesomeIcon icon={faComment} style={{ colo
 export const HomeIcon = () => <FontAwesomeIcon icon={faHome} style={{ color: '#FFFFFF' }} />
 export const CartIcon = () => <FontAwesomeIcon icon={faCartShopping} style={{ color: '#FFFFFF' }} />
 export const CirclePlusIcon = () => <FontAwesomeIcon icon={faCirclePlus} style={{ color: '#C51605', height: "1.5rem" }} />
+export const PaperPlaneIcon = () => <FontAwesomeIcon icon={faPaperPlane} style={{ color: '#FFFFFF' }} />
