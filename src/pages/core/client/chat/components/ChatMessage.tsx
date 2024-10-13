@@ -19,6 +19,12 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ commandToC
     const [senderChats, setSenderChats] = useState<string[]>([]);
     const [_, setLoading] = useState(false);
     const socket = useRef<Socket | null>(null);
+    const messagesEndRef = useRef<null | HTMLDivElement>(null)
+    const scrollToBottom = () => {
+        setTimeout(() => {
+            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+        }, 50);
+    }
 
     useEffect(() => {
         const connectToSocket = io(websocketConfig.baseUrl, {autoConnect: true, transports: ['websocket']});
@@ -47,7 +53,7 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ commandToC
             setLoading(false);
             console.log(data.data);
             setRecipientChats(prevChats => [...prevChats, data.data]);
-            
+            scrollToBottom();
         });
     
         // Cleanup the WebSocket connection when the component unmounts
@@ -61,6 +67,7 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ commandToC
             setLoading(true);
             setSenderChats([...senderChats, commandToChatbot]);
             socket.current?.emit(websocketConfig.menuRecommendation.emit, commandToChatbot);
+            scrollToBottom();
         }
     }, [commandToChatbot]);
 
@@ -93,7 +100,7 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ commandToC
             
             {
                 senderChats.length > 0 && (
-                    <div key={"chats-container"} className="flex flex-col space-y-4 px-3 py-5">
+                    <div key={"chats-container"} className="flex flex-col space-y-4 px-3 py-5 mb-15">
                         {
                             senderChats.map((text, i) =>  
                                 <>
@@ -152,6 +159,8 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ commandToC
                     </div>
                 )
             }
+
+            <div ref={messagesEndRef}></div>
         </div>
    )
 }
