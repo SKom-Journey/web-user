@@ -131,14 +131,12 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ commandToC
                                     <div key={i} className="flex items-start">
                                         <img width={30} className="mr-3" src={ChatIcon} alt="Recipient profile picture" />
                                         <div className="max-w-xs">
-
                                             <div className="bg-slate-300 text-gray-900 p-3 rounded-lg rounded-bl-none shadow-lg text-sm">
                                                 {
                                                     !recipientChats[i] && <Loader />
                                                 }
-
                                                 {
-                                                    recipientChats[i]?.length > 0 && <>Here is what i can recommend to you:</>
+                                                    recipientChats[i]?.length > 0 && <>Here's what we have for you:</>
                                                 }
                                                 {
                                                     recipientChats[i]?.length === 0 && <>Sorry we dont have anything that you requested...</>
