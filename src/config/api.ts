@@ -1,5 +1,5 @@
-const ApiConfig = {
-    baseUrl: process.env.API_URL
+const apiConfig = {
+    baseUrl: import.meta.env.VITE_API_URL
 }
 
-export default ApiConfig;
+export default apiConfig;
