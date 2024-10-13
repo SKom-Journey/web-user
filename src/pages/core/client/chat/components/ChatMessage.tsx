@@ -1,6 +1,6 @@
 import ChatIcon from "@/assets/images/chat.png";
 import { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from "react";
-import { CirclePlusIcon } from "@/components/Icons";
+import { AddToCartIcon, CircleMinusSMIcon, CirclePlusSMIcon } from "@/components/Icons";
 import io, { Socket } from 'socket.io-client';
 import { IMenu } from "@/interfaces/IMenu";
 import { IResponse } from "@/interfaces/IResponse";
@@ -12,6 +12,9 @@ import storeChatbotChat from "@/services/store_chatbot_chat";
 import getUserChatbotChat from "@/services/get_user_chatbot_chat";
 import getChatbotChat from "@/services/get_chatbot_chat";
 import clearChatbotChat from "@/services/clear_chatbot_chat";
+import getMenu from "@/services/get_menu";
+import storeMenu from "@/services/store_menu";
+import { IMenuOrder } from "@/interfaces/IMenuOrder";
 
 interface ChatMessageComponentProps {
     commandToChatbot: string;
@@ -24,6 +27,8 @@ interface ChatMessageComponentProps {
 export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ commandToChatbot, setIsWSConnected, isWSConnected, setShowRecommendedCommands, triggerClearChat }) => {
     const [recipientChats, setRecipientChats] = useState<IMenu[][]>(getChatbotChat());
     const [senderChats, setSenderChats] = useState<string[]>(getUserChatbotChat());
+    const [showTotalInputToMenuId, setShowTotalInputToMenuId] = useState<string>("");
+    const [totalInput, setTotalInput] = useState<IMenuOrder | null>(null);
     const socket = useRef<Socket | null>(null);
     const messagesEndRef = useRef<null | HTMLDivElement>(null)
     const scrollToBottom = () => {
@@ -88,6 +93,26 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ commandToC
             scrollToBottom();
         }
     }, [commandToChatbot]);
+
+    useEffect(() => {
+        if (totalInput != null) {
+            storeMenu(totalInput);
+        }
+    }, [totalInput]);
+
+    function showTotalInput(menu: IMenu) {
+        const cart = getMenu();
+        setTotalInput(cart.find(c => c.id === menu.id) ?? {...menu, note: '', total: 0});
+        setShowTotalInputToMenuId(menu.id);
+    }
+
+    function incrementTotalInput() {
+        setTotalInput(prev => prev ? { ...prev, total: prev.total + 1 } : null);
+    }
+    
+    function decrementTotalInput() {
+        setTotalInput(prev => prev ? { ...prev, total: prev.total - 1 } : null);
+    }
 
     return (
         <div className="h-full">
@@ -156,10 +181,28 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ commandToC
                                                                         <div className="text-sm font-semibold">{truncateText(menu.title, 25)}</div>
                                                                         <div className="mt-1 text-xs text-slate-500">{truncateText(menu.description, 55)}</div>
                                                                     </div>
-                                                                    <div className="w-2/12 flex px-2">
-                                                                        <button className="my-auto" title="Add to cart">
-                                                                            <CirclePlusIcon />
-                                                                        </button>
+                                                                    <div className={`${showTotalInputToMenuId === menu.id ? 'w-3/12': 'w-2/12'} flex px-2`}>
+                                                                    {
+                                                                        showTotalInputToMenuId === menu.id && (
+                                                                            <div className="flex justify-center items-center text-sm">
+                                                                                <button type="button" onClick={decrementTotalInput} className="my-auto" title="Remove from cart">
+                                                                                    <CircleMinusSMIcon />
+                                                                                </button>
+                                                                                <div className="mx-1.5 font-semibold">{totalInput?.total ?? 0}</div>
+                                                                                <button type="button" onClick={incrementTotalInput} className="my-auto" title="Add to cart">
+                                                                                    <CirclePlusSMIcon />
+                                                                                </button>
+                                                                            </div>
+                                                                        )
+                                                                    }
+                                                                    {
+                                                                        showTotalInputToMenuId !== menu.id && (
+                                                                            <button type="button" onClick={() => showTotalInput(menu)} className="my-auto mr-1.5" title="Add to cart">
+                                                                                <AddToCartIcon />
+                                                                            </button>
+                                                                        )
+                                                                    }
+
                                                                     </div>
                                                                 </div>
                                                             )
