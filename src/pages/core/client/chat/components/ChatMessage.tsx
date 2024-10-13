@@ -7,17 +7,23 @@ import { IResponse } from "@/interfaces/IResponse";
 import websocketConfig from "@/config/websocket";
 import { Loader } from "@/components/Loader";
 import truncateText from "@/utils/truncate_text";
+import storeUserChatbotChat from "@/services/store_user_chatbot_chat";
+import storeChatbotChat from "@/services/store_chatbot_chat";
+import getUserChatbotChat from "@/services/get_user_chatbot_chat";
+import getChatbotChat from "@/services/get_chatbot_chat";
+import clearChatbotChat from "@/services/clear_chatbot_chat";
 
 interface ChatMessageComponentProps {
     commandToChatbot: string;
     setIsWSConnected: Dispatch<SetStateAction<boolean>>;
     isWSConnected: boolean;
+    setShowRecommendedCommands: Dispatch<SetStateAction<boolean>>;
+    triggerClearChat: boolean;
 }
 
-export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ commandToChatbot, setIsWSConnected, isWSConnected }) => {
-    const [recipientChats, setRecipientChats] = useState<IMenu[][]>([]);
-    const [senderChats, setSenderChats] = useState<string[]>([]);
-    const [_, setLoading] = useState(false);
+export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ commandToChatbot, setIsWSConnected, isWSConnected, setShowRecommendedCommands, triggerClearChat }) => {
+    const [recipientChats, setRecipientChats] = useState<IMenu[][]>(getChatbotChat());
+    const [senderChats, setSenderChats] = useState<string[]>(getUserChatbotChat());
     const socket = useRef<Socket | null>(null);
     const messagesEndRef = useRef<null | HTMLDivElement>(null)
     const scrollToBottom = () => {
@@ -27,6 +33,8 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ commandToC
     }
 
     useEffect(() => {
+        setShowRecommendedCommands(getUserChatbotChat().length === 0);
+
         const connectToSocket = io(websocketConfig.baseUrl, {autoConnect: true, transports: ['websocket']});
         socket.current = connectToSocket;
         
@@ -41,21 +49,21 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ commandToC
             setIsWSConnected(false);
         });
   
-      // Optionally, listen for a failed connection attempt
-      connectToSocket.on('connect_failed', () => {
+        // Optionally, listen for a failed connection attempt
+        connectToSocket.on('connect_failed', () => {
             console.error('Connection failed');
             setIsWSConnected(false);
-      });
+        });
         
         // Listen for the recommendation response
         connectToSocket.on(websocketConfig.menuRecommendation.on, (data: IResponse) => {
-            console.log(data);
-            setLoading(false);
-            console.log(data.data);
             setRecipientChats(prevChats => [...prevChats, data.data]);
+            storeChatbotChat(data.data);
             scrollToBottom();
         });
-    
+        
+        scrollToBottom();
+
         // Cleanup the WebSocket connection when the component unmounts
         return () => {
             connectToSocket.disconnect();
@@ -63,9 +71,19 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ commandToC
     }, []);
 
     useEffect(() => {
+        console.log(triggerClearChat);
+        if(triggerClearChat) {
+            clearChatbotChat();
+            setRecipientChats([]);
+            setSenderChats([]);
+            setShowRecommendedCommands(true);
+        }
+    }, [triggerClearChat]);
+
+    useEffect(() => {
         if(commandToChatbot.length > 0) {
-            setLoading(true);
             setSenderChats([...senderChats, commandToChatbot]);
+            storeUserChatbotChat(commandToChatbot);
             socket.current?.emit(websocketConfig.menuRecommendation.emit, commandToChatbot);
             scrollToBottom();
         }
