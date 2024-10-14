@@ -3,7 +3,7 @@ import { IMenuOrder } from "@/interfaces/IMenuOrder";
 import deleteMenu from "./delete_menu";
 
 export default function storeMenu(menu: IMenuOrder) {
-    console.log(menu.total);
+
     // DELETE IF TOTAL IS 0
     if(menu.total === 0) {
         deleteMenu(menu.id);

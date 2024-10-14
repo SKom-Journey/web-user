@@ -13,7 +13,7 @@ export const OrderSummary: FC<OrderSummaryComponentProps> = ({
     orders
 }) => {
     useEffect(() => {
-        console.log(orders);
+        // console.log(orders);
     }, []);
 
     if(orders.length === 0) {
@@ -27,13 +27,13 @@ export const OrderSummary: FC<OrderSummaryComponentProps> = ({
 
     return (
         <div className="shadow-lg rounded-lg border p-3 font-bold mt-5">
-            <div className="mb-3 text-lg">Order Summary</div>
+            <div className="mb-1 text-lg">Order Summary</div>
 
             <div className="text-sm flex flex-wrap font-semibold">
                 {
                     orders.map((o, i) => (
                         <Fragment key={i}>
-                            <div className="w-full flex">
+                            <div className="w-full flex mt-4">
                                 <div className="w-1/12">{o.total}x</div>
                                 <div className="w-full truncate">
                                     {o.title}
@@ -47,7 +47,7 @@ export const OrderSummary: FC<OrderSummaryComponentProps> = ({
                                 <div className="mr-1">Note:</div>
                                 <div className="w-full truncate">{o.note.length > 0 ? o.note : '-'}</div>
                                 <div className="ml-2 text-sm">
-                                    <button type="button">
+                                    <button title="Edit note" type="button">
                                         <EditIcon />
                                     </button>
                                 </div>
@@ -60,7 +60,7 @@ export const OrderSummary: FC<OrderSummaryComponentProps> = ({
             <div className="text-lg flex font-bold mt-1 text-green-500 mt-6">
                 <div className="w-full">Subtotal</div>
                 <div className="w-1/12"></div>
-                <div className="w-4/12 text-right">Rp.28.000</div>
+                <div className="w-4/12 text-right">Rp.{orders.reduce((a, b) => a + b.price, 0)}</div>
             </div>
         </div>
     )

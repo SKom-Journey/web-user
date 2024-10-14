@@ -1,12 +1,17 @@
 import { LocationDotIcon, MoneyIcon } from "@/components/Icons";
 import { OrderSummary } from "./OrderSummary";
 import { IMenuOrder } from "@/interfaces/IMenuOrder";
-import getMenu from "@/services/get_menu";
-import { useState } from "react";
+import { Dispatch, FC, SetStateAction } from "react";
 
-export default function CartSummary() {
-    const [orders, setOrders] = useState<IMenuOrder[]>(getMenu());
+interface CartSummaryComponentProps {
+    setOrders: Dispatch<SetStateAction<IMenuOrder[]>>;
+    orders: IMenuOrder[];
+}
 
+export const CartSummary: FC<CartSummaryComponentProps> = ({
+    setOrders,
+    orders
+}) => {
     return(
         <>
             <div className="shadow-lg rounded-lg border p-3 font-bold">
