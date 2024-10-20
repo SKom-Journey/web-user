@@ -4,7 +4,10 @@ export default function CartSummary() {
     return(
         <>
             <div className="shadow-lg rounded-lg border p-3 font-bold">
-                <div className="mb-3 text-lg">Order Placed</div>
+                <div className="mb-3 text-lg">
+                    Order Placed
+                    <span className="ml-1.5 text-sm">(_mjusteen)</span>
+                </div>
                 <div className="text-sm flex">
                 <div><LocationDotIcon /></div>
                 <div className="ml-2 font-semibold">Table 12</div>

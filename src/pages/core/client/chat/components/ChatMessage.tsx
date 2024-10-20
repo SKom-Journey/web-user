@@ -21,6 +21,7 @@ interface ChatMessageComponentProps {
     setIsWSConnected: Dispatch<SetStateAction<boolean>>;
     isWSConnected: boolean;
     setShowRecommendedCommands: Dispatch<SetStateAction<boolean>>;
+    setTriggerClearChat: Dispatch<SetStateAction<boolean>>;
     triggerClearChat: boolean;
 }
 
@@ -28,7 +29,7 @@ interface ChatMessageMenu extends IMenu {
     total: number;
 }
 
-export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ commandToChatbot, setIsWSConnected, isWSConnected, setShowRecommendedCommands, triggerClearChat }) => {
+export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ setTriggerClearChat, commandToChatbot, setIsWSConnected, isWSConnected, setShowRecommendedCommands, triggerClearChat }) => {
     const [recipientChats, setRecipientChats] = useState<ChatMessageMenu[][]>([]);
     const [senderChats, setSenderChats] = useState<string[]>(getUserChatbotChat());
     const [showTotalInputToMenuId, setShowTotalInputToMenuId] = useState<string>("");
@@ -89,6 +90,7 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ commandToC
             setShowTotalInputToMenuId("");
             setEditedMenu(null);
             setShowRecommendedCommands(true);
+            setTriggerClearChat(false);
         }
     }, [triggerClearChat]);
     
