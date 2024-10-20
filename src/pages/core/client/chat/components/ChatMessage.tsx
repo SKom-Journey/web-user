@@ -106,7 +106,6 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ setTrigger
     }, [commandToChatbot]);
 
     useEffect(() => {
-        console.log(editedMenu);
         if (editedMenu != null) {
             storeMenu(editedMenu);
             setTotalForEachMenuByCart();
