@@ -25,7 +25,7 @@ export const Base: React.FC = () => {
       }
    }, [contentRef]);
 
-   const hideMenubar = location.pathname === '/chat'
+   const hideMenubar = ['/chat', '/cart'].includes(location.pathname) 
 
    return (
       <main className="bg-white overflow-hidden">

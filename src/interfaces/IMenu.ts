@@ -3,4 +3,5 @@ export interface IMenu {
     description: string;
     img: string;
     price: number;
+    id: string;
 }

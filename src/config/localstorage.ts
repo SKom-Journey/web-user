@@ -4,7 +4,7 @@ const localStorageConfig = {
         chatbot: 'chatbotChats',
         limitChat: 5
     },
-    cart: 'carts'
+    menu: 'menus'
 }
 
 export default localStorageConfig;
