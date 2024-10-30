@@ -1,19 +1,42 @@
-export const Sidebar = () => {
+import { Layers3, NotebookText, QrCode, Utensils } from "lucide-react";
+import { NavLink } from "react-router-dom";
+
+interface SidebarProps {
+   isOpen: boolean;
+   activePath: string; // New prop to indicate the active path
+}
+
+export const Sidebar: React.FC<SidebarProps> = ({ isOpen, activePath }) => {
    return (
-      <aside id="logo-sidebar" className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
-         <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
-            <ul className="space-y-2 font-medium">
+      <aside className={`fixed z-40 left-0 w-64 h-full bg-red-400 shadow ${isOpen ? "translate-x-0" : "-translate-x-full"} transition-transform duration-200 sm:translate-x-0 sm:block`}>
+         <div className="h-full px-3 py-8 overflow-y-auto bg-white">
+            <ul className="space-y-5 font-medium">
                <li>
-                  <a href="#" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                     <svg className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
-                        <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
-                        <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
-                     </svg>
-                     <span className="ms-3">Dashboard</span>
-                  </a>
+                  <NavLink to="/admin/manage-qr" className={`flex items-center p-4 rounded-lg group ${activePath === "/admin/manage-qr" ? 'bg-red-100 text-red-600' : 'text-gray-700'}`}>
+                     <QrCode size={16} strokeWidth={1} className={activePath === "/admin/manage-qr" ? 'text-red-600' : 'text-gray-700'} />
+                     <span className="ms-3 text-sm font-light">Manage QR</span>
+                  </NavLink>
+               </li>
+               <li>
+                  <NavLink to="/admin/incoming-order" className={`flex items-center p-4 rounded-lg group ${activePath === "/admin/incoming-order" ? 'bg-red-100 text-red-600' : 'text-gray-700'}`}>
+                     <Utensils size={16} strokeWidth={1} className={activePath === "/admin/incoming-order" ? 'text-red-600' : 'text-gray-700'} />
+                     <span className="ms-3 text-sm font-light">Incoming Order</span>
+                  </NavLink>
+               </li>
+               <li>
+                  <NavLink to="/admin/manage-category" className={`flex items-center p-4 rounded-lg group ${activePath === "/admin/manage-category" ? 'bg-red-100 text-red-600' : 'text-gray-700'}`}>
+                     <Layers3 size={16} strokeWidth={1} className={activePath === "/admin/manage-category" ? 'text-red-600' : 'text-gray-700'} />
+                     <span className="ms-3 text-sm font-light">Manage Category</span>
+                  </NavLink>
+               </li>
+               <li>
+                  <NavLink to="/admin/manage-menu" className={`flex items-center p-4 rounded-lg group ${activePath === "/admin/manage-menu" ? 'bg-red-100 text-red-600' : 'text-gray-700'}`}>
+                     <NotebookText size={16} strokeWidth={1} className={activePath === "/admin/manage-menu" ? 'text-red-600' : 'text-gray-700'} />
+                     <span className="ms-3 text-sm font-light">Manage Menu</span>
+                  </NavLink>
                </li>
             </ul>
          </div>
       </aside>
-   )
-}
+   );
+};
