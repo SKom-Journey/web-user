@@ -100,7 +100,7 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ setTrigger
             setEditedMenu(null);
             setSenderChats([...senderChats, commandToChatbot]);
             storeUserChatbotChat(commandToChatbot);
-            socket.current?.emit(websocketConfig.menuRecommendation.emit, commandToChatbot);
+            socket.current?.emit(websocketConfig.menuRecommendation.emit, commandToChatbot, "userID");
             scrollToBottom();
         }
     }, [commandToChatbot]);
