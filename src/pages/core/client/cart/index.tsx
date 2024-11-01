@@ -8,8 +8,8 @@ export const CartPage: React.FC = () => {
    const [orders, setOrders] = useState<IMenuOrder[]>(getMenu());
 
    return (
-      <div className="flex flex-col h-screen max-h-[87vh]">
-         <div className="flex-grow overflow-y-auto" style={{scrollbarWidth: "thin"}}>
+      <div className="flex flex-col h-full">
+         <div className="overflow-y-auto h-full mt-12" style={{scrollbarWidth: "thin"}}>
             <CartSummary orders={orders} setOrders={setOrders} />
          </div>
          
