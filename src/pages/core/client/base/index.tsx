@@ -28,7 +28,7 @@ export const Base: React.FC = () => {
    const hideMenubar = ['/chat', '/cart'].includes(location.pathname)
 
    return (
-      <main className="bg-white overflow-hidden h-full">
+      <main className="bg-white overflow-hidden h-full w-full max-w-[480px] m-auto">
          <div id="navbar" className="pb-[4rem]">
             <Navbar title={title} />
          </div>
