@@ -2,6 +2,9 @@ import { NotFound, Base, BaseAdmin } from "@/pages";
 import { MenuPage } from "@/pages/core/client/menus";
 import { ChatPage } from "@/pages/core/client/chat";
 import { CartPage } from "@/pages/core/client/cart";
+import LoginUserPage from "@/pages/auth/client/LoginUserPage";
+import RegisterPage from "@/pages/auth/client/RegisterPage";
+import { AuthClient } from "@/pages/core/client/base/auth";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { QrPageAdmin } from "@/pages/core/admin/qr";
 import { IncomingOrderPageAdmin } from "@/pages/core/admin/order";
@@ -34,6 +37,24 @@ const router = createBrowserRouter([
             element: <NotFound />,
          },
       ],
+   },
+   {
+      path: '/auth',
+      element: <AuthClient />,
+      children: [
+         {
+            index: true,
+            element: <Navigate to="/login" />
+         },
+         {
+            path: '/auth/login',
+            element: <LoginUserPage />,
+         },
+         {
+            path: '/auth/register',
+            element: <RegisterPage />,
+         },
+      ]
    },
    {
       path: '/admin',

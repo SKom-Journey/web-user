@@ -100,7 +100,7 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ setTrigger
             setEditedMenu(null);
             setSenderChats([...senderChats, commandToChatbot]);
             storeUserChatbotChat(commandToChatbot);
-            socket.current?.emit(websocketConfig.menuRecommendation.emit, commandToChatbot);
+            socket.current?.emit(websocketConfig.menuRecommendation.emit, commandToChatbot, "userID");
             scrollToBottom();
         }
     }, [commandToChatbot]);
@@ -155,7 +155,7 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ setTrigger
     }
 
     return (
-        <div className="h-full">
+        <>
             {
                 senderChats.length === 0 && (
                     <div className="h-full flex flex-wrap justify-center items-center">
@@ -269,6 +269,6 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ setTrigger
             }
 
             <div ref={messagesEndRef}></div>
-        </div>
+        </>
    )
 }
