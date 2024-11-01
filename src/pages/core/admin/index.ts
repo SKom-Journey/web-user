@@ -1,0 +1,1 @@
+export { BaseAdmin } from "@/pages/core/admin/base";
