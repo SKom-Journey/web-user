@@ -4,6 +4,7 @@ import Google from "@/assets/images/goggle.png";
 import { FormEvent, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "@/services/auth_service";
+import { storeSession } from "@/services/session_service";
 
 export default function LoginUserPage() {
     const navigate = useNavigate();
@@ -15,6 +16,7 @@ export default function LoginUserPage() {
         const req = await login(emailRef.current?.value!, pwdRef.current?.value!);
 
         if(!req.error) {
+            storeSession(req.data, "token");
             navigate("/menu");
         }
     }
