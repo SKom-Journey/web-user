@@ -2,8 +2,9 @@ import { ButtonLarge, TextInput } from "@/config/theme";
 import RyomuRed from "@/assets/images/ryomu-logo-red.png";
 import Google from "@/assets/images/goggle.png";
 import { FormEvent, useRef } from "react";
-import register from "@/services/auth_service";
+import { register } from "@/services/auth_service";
 import { useNavigate } from "react-router-dom";
+import { successToast } from "@/services/toast_service";
 
 export default function RegisterPage() {
     const navigate = useNavigate();
@@ -14,12 +15,10 @@ export default function RegisterPage() {
         e.preventDefault();
         const req = await register(emailRef.current?.value!, pwdRef.current?.value!);
 
-        if(req.error) {
-            alert(req.data);
-            return;
+        if(!req.error) {
+            successToast("Account Created Please Login!");
+            navigate("/auth/login");
         }
-
-        navigate("/auth/login");
     }
 
     return(

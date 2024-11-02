@@ -3,6 +3,8 @@ import { Navbar } from "@/components/base/navbar/Navbar";
 import { Outlet, useLocation } from "react-router-dom";
 import autoAnimate from "@formkit/auto-animate";
 import { useEffect, useRef } from "react";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const titleMapping: { [key: string]: string } = {
    '/menu': 'Menu',
@@ -28,18 +30,22 @@ export const Base: React.FC = () => {
    const hideMenubar = ['/chat', '/cart'].includes(location.pathname)
 
    return (
-      <main className="bg-white overflow-hidden h-full w-full max-w-[480px] m-auto pt-14">
-         <div id="navbar">
-            <Navbar title={title} />
-         </div>
-         <div id="content" className="p-5 h-full" ref={contentRef}>
-            <Outlet />
-         </div>
-         <div id="menubar">
-            {!hideMenubar && (
-               <Menubar />
-            )}
-         </div>
-      </main>
+      <>
+         <main className="bg-white overflow-hidden h-full w-full max-w-[480px] m-auto pt-14">
+            <div id="navbar">
+               <Navbar title={title} />
+            </div>
+            <div id="content" className="p-5 h-full" ref={contentRef}>
+               <Outlet />
+            </div>
+            <div id="menubar">
+               {!hideMenubar && (
+                  <Menubar />
+               )}
+            </div>
+         </main>
+
+         <ToastContainer />
+      </>
    );
 };
