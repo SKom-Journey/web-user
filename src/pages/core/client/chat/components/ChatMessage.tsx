@@ -35,10 +35,10 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ setTrigger
     const [showTotalInputToMenuId, setShowTotalInputToMenuId] = useState<string>("");
     const [editedMenu, setEditedMenu] = useState<IMenuOrder | null>(null);
     const socket = useRef<Socket | null>(null);
-    const messagesEndRef = useRef<null | HTMLDivElement>(null)
+    const messagesEndRef = useRef<null | HTMLDivElement>(null);
     const scrollToBottom = () => {
         setTimeout(() => {
-            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
         }, 50);
     }
 
@@ -74,8 +74,6 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ setTrigger
             scrollToBottom();
         });
         
-        scrollToBottom();
-
         // Cleanup the WebSocket connection when the component unmounts
         return () => {
             connectToSocket.disconnect();
@@ -152,10 +150,11 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ setTrigger
             });
         });
         setRecipientChats(chatbotChat);
+        scrollToBottom();
     }
 
     return (
-        <>
+        <div className="h-full">
             {
                 senderChats.length === 0 && (
                     <div className="h-full flex flex-wrap justify-center items-center">
@@ -269,6 +268,6 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ setTrigger
             }
 
             <div ref={messagesEndRef}></div>
-        </>
+        </div>
    )
 }

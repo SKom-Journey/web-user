@@ -9,13 +9,12 @@ export const CartPage: React.FC = () => {
 
    return (
       <div className="flex flex-col h-full">
-         <div className="overflow-y-auto h-full mt-12" style={{scrollbarWidth: "thin"}}>
+         <div className="overflow-y-auto h-full" style={{scrollbarWidth: "thin"}}>
             <CartSummary orders={orders} setOrders={setOrders} />
          </div>
-         
-         <center className="bottom-0 pb-3">
+         <div className="bottom-0 pb-3">
             <OrderButton orders={orders} />
-         </center>
+         </div>
       </div>
    );
 };

@@ -13,7 +13,7 @@ export const CartSummary: FC<CartSummaryComponentProps> = ({
     orders
 }) => {
     return(
-        <div className="mt-4">
+        <div className="mt-2">
             <div className="shadow-lg rounded-lg border p-3 font-bold">
                 <div className="mb-3 text-lg">
                     Order Placed

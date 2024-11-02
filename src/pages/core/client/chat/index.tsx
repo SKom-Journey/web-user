@@ -10,7 +10,7 @@ export const ChatPage: React.FC = () => {
 
    return (
       <div className="flex flex-col h-full">
-         <div className="overflow-y-auto h-full mt-12" style={{scrollbarWidth: "thin"}}>
+         <div className="overflow-y-auto h-full" style={{scrollbarWidth: "thin"}}>
             <ChatMessageComponent setTriggerClearChat={setTriggerClearChat} triggerClearChat={triggerClearChat} commandToChatbot={textInput} setIsWSConnected={setIsWSConnected} isWSConnected={isWSConnected} setShowRecommendedCommands={setShowRecommendedCommands} />
          </div>
          <div className="bottom-0 pb-3">
