@@ -10,7 +10,7 @@ import { CirclePlusIcon } from "@/components/Icons"
 
 interface CardMenuProps {
    title: string;
-   price: string;
+   price: number;
 }
 
 export const CardMenu: React.FC<CardMenuProps> = ({ title, price }) => {
