@@ -36,7 +36,6 @@ export const Base: React.FC = () => {
    }, []);
 
    useEffect(() => {
-
       if (contentRef.current) {
          autoAnimate(contentRef.current, {
             duration: 150,

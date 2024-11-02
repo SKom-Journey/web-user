@@ -16,15 +16,17 @@ export const MenuPage: React.FC = () => {
    }
 
    return (
-      <div>
-         {
-            menuItems.map((m, i) => <Fragment key={i}>
-               <h1 className="font-bold my-4 text-xl">{m.category_name}</h1>
-               {m.items.map((item) => (
-                  <CardMenu key={item.id} title={item.title} price={item.price} />
-               ))}
-            </Fragment>)
-         }
+      <div className="h-full pb-20">
+         <div className="h-full overflow-y-auto" style={{scrollbarWidth: "thin"}}>
+            {
+               menuItems.map((m, i) => <Fragment key={i}>
+                  <h1 className="font-bold my-4 text-xl">{m.category_name}</h1>
+                  {m.items.map((item) => (
+                     <CardMenu key={item.id} title={item.title} price={item.price} />
+                  ))}
+               </Fragment>)
+            }
+         </div>
       </div>
    );
 };

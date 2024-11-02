@@ -22,7 +22,7 @@ export const CardMenu: React.FC<CardMenuProps> = ({ title, price }) => {
                   <img src={BaseImg} className="h-14 me-3 rounded" alt="base-img" />
                   <div className="flex flex-col">
                      <CardTitle className="mb-1">{title}</CardTitle>
-                     <CardDescription>{price}</CardDescription>
+                     <CardDescription>Rp.{price}</CardDescription>
                   </div>
                </div>
                <Link to={'#'}>
