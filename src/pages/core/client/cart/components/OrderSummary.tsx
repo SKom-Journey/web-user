@@ -1,9 +1,9 @@
-import { EditIcon } from "@/components/Icons";
 import { Dispatch, FC, Fragment, SetStateAction, useEffect } from "react";
 import CartSVG from "@/assets/svg/cart.svg";
 import { ICart } from "@/interfaces/ICart";
 import localizeNumber from "@/utils/localize_number";
 import Spinnner from "@/components/Spinner";
+import OrderNote from "./OrderNote";
 
 interface OrderSummaryComponentProps {
     setOrders: Dispatch<SetStateAction<ICart[]>>;
@@ -16,6 +16,7 @@ export const OrderSummary: FC<OrderSummaryComponentProps> = ({
     orderLoading,
     orders
 }) => {
+    
     useEffect(() => {
         // console.log(orders);
     }, []);
@@ -54,15 +55,7 @@ export const OrderSummary: FC<OrderSummaryComponentProps> = ({
                                 </div>
                             </div>
 
-                            <div className="w-full text-xs text-slate-400 mt-2 flex justify-center items-center">
-                                <div className="mr-1">Note:</div>
-                                <div className="w-full truncate">{o.note.length > 0 ? o.note : '-'}</div>
-                                <div className="ml-2 text-sm">
-                                    <button title="Edit note" type="button">
-                                        <EditIcon />
-                                    </button>
-                                </div>
-                            </div>
+                            <OrderNote cartId={o.id} note={o.note} />
                         </Fragment>
                     ))
                 }

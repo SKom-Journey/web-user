@@ -11,7 +11,9 @@ import {
    faPenToSquare,
    faMoneyBillWaveAlt,
    faCircleMinus,
-   faCartPlus
+   faCartPlus,
+   faCheckCircle,
+   faTimesCircle
 } from '@fortawesome/free-solid-svg-icons'
 
 export const ArrowLeftIcon = () => <FontAwesomeIcon icon={faArrowLeft} />
@@ -27,3 +29,5 @@ export const LocationDotIcon = () => <FontAwesomeIcon icon={faLocationDot} style
 export const EditIcon = () => <FontAwesomeIcon icon={faPenToSquare} style={{ color: '#FFB534' }} />
 export const AddToCartIcon = () => <FontAwesomeIcon icon={faCartPlus} style={{ color: '#C51605' }} />
 export const MoneyIcon = () => <FontAwesomeIcon icon={faMoneyBillWaveAlt} style={{ color: '#65B741' }} />
+export const CheckMarkIcon = () => <FontAwesomeIcon icon={faCheckCircle} style={{ color: '#65B741' }} />
+export const TimesIcon = () => <FontAwesomeIcon icon={faTimesCircle} style={{ color: '#C51605' }} />

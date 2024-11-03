@@ -1,5 +1,8 @@
 import Spinnner from "@/components/Spinner";
 import { ICart } from "@/interfaces/ICart";
+import { IOrder } from "@/interfaces/IOrder";
+import { getUserInfo } from "@/services/session_service";
+import { getTableNumber } from "@/services/table_service";
 import localizeNumber from "@/utils/localize_number";
 import { FC, useRef, useState } from "react";
 
@@ -10,7 +13,7 @@ interface OrderButtonComponentProps {
 export const OrderButton: FC<OrderButtonComponentProps> = ({
     orders
 }) => {
-    const [seconds, setSeconds] = useState(5);
+    const [seconds, setSeconds] = useState(4);
     const [loading, setLoading] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const timer = useRef<NodeJS.Timeout | null>(null);
@@ -21,7 +24,7 @@ export const OrderButton: FC<OrderButtonComponentProps> = ({
     }
 
     async function handleOrderClick() {
-        setSeconds(5);
+        setSeconds(4);
         setLoading(true);
 
         if(timer.current != null) {
@@ -29,7 +32,7 @@ export const OrderButton: FC<OrderButtonComponentProps> = ({
             timer.current = null;
             setLoading(false);
             return;
-        } 
+        }
         
         if(interval.current != null) {
             clearInterval(interval.current);
@@ -42,18 +45,33 @@ export const OrderButton: FC<OrderButtonComponentProps> = ({
         timer.current = setTimeout(() => {
             setLoading(false);
             sendOrder();
-        }, 5000);
+        }, 4000);
     }
 
     async function sendOrder() {
         setDisabled(true);
+        const data: IOrder = {
+            items: [],
+            table_number: getTableNumber()!,
+            user_id: getUserInfo().id
+        };
+        
+        for(const order of orders) {
+            data.items.push({
+                id: order.id,
+                note: order.note,
+                total: order.quantity
+            });
+        }
+
+        console.log(data);
     }
 
     return (
         <button 
             type="button" 
             title="Place order" 
-            className={`mt-8 w-full rounded-full py-3 font-bold hover:bg-primary/90 flex items-center justify-center text-white bg-[#C51605] relative ${disabled ? 'opacity-80' : ''}`}
+            className={`mt-8 w-full rounded-full py-3 font-bold flex items-center justify-center text-white bg-[#C51605] relative ${disabled ? 'opacity-80' : 'hover:bg-primary/90'}`}
             onClick={handleOrderClick}
             disabled={disabled}
         >

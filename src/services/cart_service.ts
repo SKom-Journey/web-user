@@ -75,3 +75,25 @@ export async function createCart(menuId: string, note: string | undefined = unde
         }
     }
 }
+
+export async function updateCartNote(cartId: string, note: string): Promise<IResponse> {
+    try {
+        const req = await axiosConfig.put(`/carts/${cartId}`, {
+            note
+        });
+
+        if(req.data.error) {
+            errorToast(req.data.data);
+        }
+
+        return req.data;
+    } catch (error) {
+        console.error(error);
+        errorToast();
+        return {
+            data: null,
+            error: true,
+            status: "ERROR"
+        }
+    }
+}
