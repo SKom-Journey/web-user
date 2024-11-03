@@ -1,12 +1,13 @@
 import { LocationDotIcon, MoneyIcon } from "@/components/Icons";
 import { OrderSummary } from "./OrderSummary";
-import { IMenuOrder } from "@/interfaces/IMenuOrder";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { getTableNumber } from "@/services/table_service";
+import { getUserInfo } from "@/services/session_service";
+import { ICart } from "@/interfaces/ICart";
 
 interface CartSummaryComponentProps {
-    setOrders: Dispatch<SetStateAction<IMenuOrder[]>>;
-    orders: IMenuOrder[];
+    setOrders: Dispatch<SetStateAction<ICart[]>>;
+    orders: ICart[];
 }
 
 export const CartSummary: FC<CartSummaryComponentProps> = ({
@@ -14,8 +15,10 @@ export const CartSummary: FC<CartSummaryComponentProps> = ({
     orders
 }) => {
     const [table, setTable] = useState("");
+    const [username, setUsername] = useState("");
 
     useEffect(() => {
+        setUsername(getUserInfo().name);
         setTable(getTableNumber()!);
     }, []);
 
@@ -24,7 +27,7 @@ export const CartSummary: FC<CartSummaryComponentProps> = ({
             <div className="shadow-lg rounded-lg border p-3 font-bold">
                 <div className="mb-3 text-lg">
                     Order Placed
-                    <span className="ml-1.5 text-sm">(_mjusteen)</span>
+                    <span className="ml-1.5 text-sm">({username})</span>
                 </div>
                 <div className="text-sm flex">
                     <div>

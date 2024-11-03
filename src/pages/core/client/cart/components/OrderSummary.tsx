@@ -1,11 +1,12 @@
 import { EditIcon } from "@/components/Icons";
-import { IMenuOrder } from "@/interfaces/IMenuOrder";
 import { Dispatch, FC, Fragment, SetStateAction, useEffect } from "react";
 import CartSVG from "@/assets/svg/cart.svg";
+import { ICart } from "@/interfaces/ICart";
+import localizeNumber from "@/utils/localize_number";
 
 interface OrderSummaryComponentProps {
-    setOrders: Dispatch<SetStateAction<IMenuOrder[]>>;
-    orders: IMenuOrder[];
+    setOrders: Dispatch<SetStateAction<ICart[]>>;
+    orders: ICart[];
 }
 
 export const OrderSummary: FC<OrderSummaryComponentProps> = ({
@@ -34,12 +35,12 @@ export const OrderSummary: FC<OrderSummaryComponentProps> = ({
                     orders.map((o, i) => (
                         <Fragment key={i}>
                             <div className="w-full flex mt-4">
-                                <div className="w-1/12">{o.total}x</div>
+                                <div className="w-1/12">{o.quantity}x</div>
                                 <div className="w-full truncate">
-                                    {o.title}
+                                    {o.menu!.title}
                                 </div>
                                 <div className="w-4/12 text-right">
-                                    Rp.{o.price}
+                                    Rp.{localizeNumber(o.menu!.price)}
                                 </div>
                             </div>
 
@@ -60,7 +61,7 @@ export const OrderSummary: FC<OrderSummaryComponentProps> = ({
             <div className="text-lg flex font-bold mt-1 text-green-500 mt-6">
                 <div className="w-full">Subtotal</div>
                 <div className="w-1/12"></div>
-                <div className="w-4/12 text-right">Rp.{orders.reduce((a, b) => a + b.price, 0)}</div>
+                <div className="w-4/12 text-right">Rp.{localizeNumber(orders.reduce((a, b) => a + b.menu!.price, 0))}</div>
             </div>
         </div>
     )

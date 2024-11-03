@@ -56,7 +56,7 @@ const AddToCartButton: FC<AddToCartButtonProps> = ({ menu, carts, setCartUpdated
     return <>
         {
             !inputMode && carts.find(c => c.menu_id === menu.id) == null &&
-                <button type="button" onClick={showTotalInput} title="Add to cart">
+                <button className="hover:bg-gray-200 p-1 px-2 rounded-lg" type="button" onClick={showTotalInput} title="Add to cart">
                     <AddToCartIcon />
                 </button>
         }
