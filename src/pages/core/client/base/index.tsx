@@ -12,6 +12,7 @@ const titleMapping: { [key: string]: string } = {
    '/menu': 'Menu',
    '/chat': 'Chatbot',
    '/cart': 'Cart',
+   '/order-success': 'Order Placed',
    '*': 'Not Found',
 };
 

@@ -10,6 +10,7 @@ import { QrPageAdmin } from "@/pages/core/admin/qr";
 import { IncomingOrderPageAdmin } from "@/pages/core/admin/order";
 import { CategoryPageAdmin } from "@/pages/core/admin/category";
 import { MenuPageAdmin } from "@/pages/core/admin/menu";
+import OrderSuccessPage from "@/pages/core/client/message/OrderSuccessPage";
 
 const router = createBrowserRouter([
    {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
          {
             path: '/cart',
             element: <CartPage />,
+         },
+         {
+            path: '/order-success',
+            element: <OrderSuccessPage />,
          },
          {
             path: '*',
