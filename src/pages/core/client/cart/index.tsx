@@ -6,6 +6,7 @@ import { ICart } from "@/interfaces/ICart";
 
 export const CartPage: React.FC = () => {
    const [orders, setOrders] = useState<ICart[]>([]);
+   const [orderLoading, setOrderLoading] = useState(true);
 
    useEffect(() => {
       setupData();
@@ -14,12 +15,13 @@ export const CartPage: React.FC = () => {
    async function setupData() {
       const getCarts: ICart[] = (await getCartsByUserId()).data;
       setOrders(getCarts);
+      setOrderLoading(false);
    }
 
    return (
       <div className="flex flex-col h-full">
          <div className="overflow-y-auto h-full" style={{scrollbarWidth: "thin"}}>
-            <CartSummary orders={orders} setOrders={setOrders} />
+            <CartSummary orderLoading={orderLoading} orders={orders} setOrders={setOrders} />
          </div>
          <div className="bottom-0 pb-3">
             <OrderButton orders={orders} />

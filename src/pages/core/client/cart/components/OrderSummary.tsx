@@ -3,21 +3,24 @@ import { Dispatch, FC, Fragment, SetStateAction, useEffect } from "react";
 import CartSVG from "@/assets/svg/cart.svg";
 import { ICart } from "@/interfaces/ICart";
 import localizeNumber from "@/utils/localize_number";
+import Spinnner from "@/components/Spinner";
 
 interface OrderSummaryComponentProps {
     setOrders: Dispatch<SetStateAction<ICart[]>>;
     orders: ICart[];
+    orderLoading: boolean;
 }
 
 export const OrderSummary: FC<OrderSummaryComponentProps> = ({
     setOrders,
+    orderLoading,
     orders
 }) => {
     useEffect(() => {
         // console.log(orders);
     }, []);
 
-    if(orders.length === 0) {
+    if(orders.length === 0 && !orderLoading) {
         return (
             <div className="py-8 shadow-lg rounded-lg border p-3 font-bold mt-5 flex flex-wrap items-center justify-center">
                 <img className="w-1/2" src={CartSVG} alt="" />
@@ -31,6 +34,13 @@ export const OrderSummary: FC<OrderSummaryComponentProps> = ({
             <div className="mb-1 text-lg">Order Summary</div>
 
             <div className="text-sm flex flex-wrap font-semibold">
+                {
+                    orderLoading && <div className="w-full my-12 text-center">
+                        <Spinnner size="xl" />
+                        <div className="mt-6 font-semibold">Please Wait...</div>
+                    </div>
+                }
+
                 {
                     orders.map((o, i) => (
                         <Fragment key={i}>

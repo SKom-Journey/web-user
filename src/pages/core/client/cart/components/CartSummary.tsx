@@ -8,11 +8,13 @@ import { ICart } from "@/interfaces/ICart";
 interface CartSummaryComponentProps {
     setOrders: Dispatch<SetStateAction<ICart[]>>;
     orders: ICart[];
+    orderLoading: boolean;
 }
 
 export const CartSummary: FC<CartSummaryComponentProps> = ({
     setOrders,
-    orders
+    orders,
+    orderLoading
 }) => {
     const [table, setTable] = useState("");
     const [username, setUsername] = useState("");
@@ -37,7 +39,7 @@ export const CartSummary: FC<CartSummaryComponentProps> = ({
                 </div>
             </div>
             
-            <OrderSummary setOrders={setOrders} orders={orders} />
+            <OrderSummary orderLoading={orderLoading} setOrders={setOrders} orders={orders} />
 
             <div className="shadow-lg rounded-lg flex border px-3 py-4 justify-center text-lg items-center font-bold mt-5">
                 <div className="w-full">Payment Method</div>
