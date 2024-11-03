@@ -4,4 +4,7 @@ export interface IMenu {
     img: string;
     price: number;
     id: string;
+
+    note?: string;
+    quantity?: number;
 }

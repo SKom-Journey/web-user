@@ -4,15 +4,18 @@ import {
    CardHeader,
    CardTitle,
 } from "@/components/ui/card"
-import { Link } from "react-router-dom"
 import AddToCartButton from "@/components/AddToCartButton";
 import { IMenu } from "@/interfaces/IMenu";
+import { ICart } from "@/interfaces/ICart";
 
 interface CardMenuProps {
-   menu: IMenu
+   menu: IMenu;
+   carts: ICart[];
+   cartUpdating: boolean;
+   setCartUpdated: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const CardMenu: React.FC<CardMenuProps> = ({ menu }) => {
+export const CardMenu: React.FC<CardMenuProps> = ({ menu, carts, setCartUpdated, cartUpdating }) => {
    return (
       <Card className="shadow-sm mb-3">
          <CardHeader className="p-4">
@@ -24,9 +27,9 @@ export const CardMenu: React.FC<CardMenuProps> = ({ menu }) => {
                      <CardDescription>Rp.{menu.price}</CardDescription>
                   </div>
                </div>
-               <Link to={'#'}>
-                  <AddToCartButton menu={menu} />
-               </Link>
+               <div>
+                  <AddToCartButton cartUpdating={cartUpdating} carts={carts} menu={menu} setCartUpdated={setCartUpdated} />
+               </div>
             </div>
          </CardHeader>
       </Card>

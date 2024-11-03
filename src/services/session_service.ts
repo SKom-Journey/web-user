@@ -15,5 +15,5 @@ export function storeSession(info: any, token: string) {
 }
 
 export function getUserInfo() {
-    JSON.parse(localStorage.getItem('info') ?? "{}");
+    return JSON.parse(localStorage.getItem('info') ?? "{}");
 }
