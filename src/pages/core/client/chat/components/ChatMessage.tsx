@@ -15,6 +15,11 @@ import clearChatbotChat from "@/services/clear_chatbot_chat";
 import getMenu from "@/services/get_menu";
 import storeMenu from "@/services/store_menu";
 import { IMenuOrder } from "@/interfaces/IMenuOrder";
+import AddToCartButton from "@/components/AddToCartButton";
+import { ICart } from "@/interfaces/ICart";
+import { getUserInfo } from "@/services/session_service";
+import { getUserChats } from "@/services/chat_service";
+import { IChat } from "@/interfaces/IChat";
 
 interface ChatMessageComponentProps {
     commandToChatbot: string;
@@ -29,7 +34,18 @@ interface ChatMessageMenu extends IMenu {
     total: number;
 }
 
-export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ setTriggerClearChat, commandToChatbot, setIsWSConnected, isWSConnected, setShowRecommendedCommands, triggerClearChat }) => {
+export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ 
+    setTriggerClearChat, 
+    commandToChatbot, 
+    setIsWSConnected, 
+    isWSConnected, 
+    setShowRecommendedCommands, 
+    triggerClearChat 
+}) => {
+    const [chats, setChats] = useState<IChat[]>([]);
+    const [carts, setCarts] = useState<ICart[]>([]);
+    const [cartUpdated, setCartUpdated] = useState<boolean>(false);
+    const [cartUpdating, setCartUpdating] = useState<boolean>(false);
     const [recipientChats, setRecipientChats] = useState<ChatMessageMenu[][]>([]);
     const [senderChats, setSenderChats] = useState<string[]>(getUserChatbotChat());
     const [showTotalInputToMenuId, setShowTotalInputToMenuId] = useState<string>("");
@@ -43,8 +59,7 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ setTrigger
     }
 
     useEffect(() => {
-        setShowRecommendedCommands(getUserChatbotChat().length === 0);
-        setTotalForEachMenuByCart();
+        getChats();
 
         const connectToSocket = io(websocketConfig.baseUrl, {autoConnect: true, transports: ['websocket']});
         socket.current = connectToSocket;
@@ -98,7 +113,7 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ setTrigger
             setEditedMenu(null);
             setSenderChats([...senderChats, commandToChatbot]);
             storeUserChatbotChat(commandToChatbot);
-            socket.current?.emit(websocketConfig.menuRecommendation.emit, commandToChatbot, "userID");
+            socket.current?.emit(websocketConfig.menuRecommendation.emit, commandToChatbot, getUserInfo().id);
             scrollToBottom();
         }
     }, [commandToChatbot]);
@@ -110,32 +125,9 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ setTrigger
         }
     }, [editedMenu]);
 
-    function showTotalInput(menu: IMenu) {
-        const cart = getMenu();
-        const getById = cart.find(c => c.id === menu.id);
-        if(getById != null) {
-            setEditedMenu(getById);
-        } else {
-            setEditedMenu({
-                ...menu,
-                total: 1,
-                note: ''
-            });
-        }
-        setShowTotalInputToMenuId(menu.id);
-    }
-
-    function incrementTotalInput() {
-        setEditedMenu(prev => prev ? { ...prev, total: prev.total + 1 } : null);
-    }
-    
-    function decrementTotalInput() {
-        setEditedMenu(prev => 
-            prev ? { 
-              ...prev, 
-              total: prev.total > 0 ? prev.total - 1 : 0 
-            } : null
-        );
+    async function getChats() {
+        const chats = await getUserChats();
+        setChats(chats.data);
     }
 
     function setTotalForEachMenuByCart() {
@@ -156,7 +148,7 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ setTrigger
     return (
         <div className="h-full">
             {
-                senderChats.length === 0 && (
+                chats.length === 0 && (
                     <div className="h-full flex flex-wrap justify-center items-center">
                         <center>
                             {
@@ -181,90 +173,60 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ setTrigger
             }
             
             {
-                senderChats.length > 0 && (
-                    <div key={"chats-container"} className="flex flex-col space-y-4 px-3 py-5 mb-15">
-                        {
-                            senderChats.map((text, i) =>  
-                                <Fragment key={i}>
-                                    <div className="flex justify-end">
-                                        <div className="max-w-xs bg-blue-500 text-white p-3 rounded-lg rounded-br-none shadow text-sm">
-                                            {text}
-                                        </div>
-                                    </div>
+                chats.map((c, i ) => <>
+                    <div key={i} className="flex flex-col space-y-4 px-3 py-5 mb-15">
+                        <Fragment>
+                            <div className="flex justify-end">
+                                <div className="max-w-xs bg-blue-500 text-white p-3 rounded-lg rounded-br-none shadow text-sm">
+                                    {c.user_message}
+                                </div>
+                            </div>
 
-                                    <div className="flex items-start">
-                                        <img width={30} className="mr-3" src={ChatIcon} alt="Recipient profile picture" />
-                                        <div className="max-w-xs">
-                                            <div className="bg-slate-300 text-gray-900 p-3 rounded-lg rounded-bl-none shadow text-sm">
+                            <div className="flex items-start">
+                                <img width={30} className="mr-3" src={ChatIcon} alt="Recipient profile picture" />
+                                <div className="max-w-xs">
+                                    <div className="bg-slate-300 text-gray-900 p-3 rounded-lg rounded-bl-none shadow text-sm">
+                                        {
+                                            !c.menus && <Loader />
+                                        }
+                                        {
+                                            c.menus.length > 0 && <>Here's what we have for you:</>
+                                        }
+                                        {
+                                            c.menus.length === 0 && <>Sorry we dont have anything that you requested...</>
+                                        }
+                                    </div>
+                                    
+                                    {
+                                        c.menus.length > 0 && (
+                                            <div className="mt-3">
                                                 {
-                                                    !recipientChats[i] && <Loader />
-                                                }
-                                                {
-                                                    recipientChats[i]?.length > 0 && <>Here's what we have for you:</>
-                                                }
-                                                {
-                                                    recipientChats[i]?.length === 0 && <>Sorry we dont have anything that you requested...</>
+                                                    c.menus && c.menus.map((menu, idx) => 
+                                                        // TODO REDIRECT TO DETAIL PAGE
+                                                        <div key={idx} className="flex rounded-lg border-2 shadow h-20 mt-2">
+                                                            <a className="w-full flex hover:bg-slate-200" href="#">
+                                                                <div className="w-6/12 p-1.5">
+                                                                    <img className="rounded h-full w-full object-cover" src={menu.img} alt="Menu Img" />
+                                                                </div>
+                                                                <div className="w-full p-1">
+                                                                    <div className="text-sm font-semibold">{truncateText(menu.title, 25)}</div>
+                                                                    <div className="mt-1 text-xs text-slate-500">{truncateText(menu.description, 55)}</div>
+                                                                </div>
+                                                            </a>
+                                                            <div className={`${showTotalInputToMenuId === menu.id ? 'w-3/12': 'w-2/12'} flex px-2 items-center justify-center`}>
+                                                                <AddToCartButton menu={menu} key={i} carts={carts} cartUpdating={cartUpdating} setCartUpdated={setCartUpdated} />
+                                                            </div>
+                                                        </div>
+                                                    )
                                                 }
                                             </div>
-                                            
-                                            {
-                                                recipientChats[i]?.length > 0 && (
-                                                    <div className="mt-3">
-                                                        {
-                                                            recipientChats[i] && recipientChats[i].map((menu, idx) => 
-                                                                // TODO REDIRECT TO DETAIL PAGE
-                                                                <div key={idx} className="flex rounded-lg border-2 shadow h-20 mt-2">
-                                                                    <a className="w-full flex hover:bg-slate-200" href="#">
-                                                                        <div className="w-6/12 p-1.5">
-                                                                            <img className="rounded h-full w-full object-cover" src={menu.img} alt="Menu Img" />
-                                                                        </div>
-                                                                        <div className="w-full p-1">
-                                                                            <div className="text-sm font-semibold">{truncateText(menu.title, 25)}</div>
-                                                                            <div className="mt-1 text-xs text-slate-500">{truncateText(menu.description, 55)}</div>
-                                                                        </div>
-                                                                    </a>
-                                                                    <div className={`${showTotalInputToMenuId === menu.id ? 'w-3/12': 'w-2/12'} flex px-2 items-center justify-center`}>
-                                                                    {
-                                                                        showTotalInputToMenuId === menu.id && (
-                                                                            <div className="flex justify-center items-center text-sm">
-                                                                                <button type="button" onClick={decrementTotalInput} className="my-auto" title="Remove from cart">
-                                                                                    <CircleMinusSMIcon />
-                                                                                </button>
-                                                                                <div className="mx-1.5 font-semibold">{editedMenu?.total ?? 0}</div>
-                                                                                <button type="button" onClick={incrementTotalInput} className="my-auto" title="Add to cart">
-                                                                                    <CirclePlusSMIcon />
-                                                                                </button>
-                                                                            </div>
-                                                                        )
-                                                                    }
-                                                                    {
-                                                                        showTotalInputToMenuId !== menu.id && menu.total > 0 && (
-                                                                            <button className="hover:bg-[#C51605] hover:text-white text-xs w-6 h-6 rounded-full border-2 border-[#C51605] text-[#C51605] font-semibold" type="button" onClick={() => showTotalInput(menu)} title="Edit cart">
-                                                                                {menu.total}
-                                                                            </button>
-                                                                        )
-                                                                    }
-                                                                    {
-                                                                        showTotalInputToMenuId !== menu.id && menu.total === 0 && (
-                                                                            <button type="button" onClick={() => showTotalInput(menu)} title="Add to cart">
-                                                                                <AddToCartIcon />
-                                                                            </button>
-                                                                        )
-                                                                    }
-                                                                    </div>
-                                                                </div>
-                                                            )
-                                                        }
-                                                    </div>
-                                                )
-                                            }
-                                        </div>
-                                    </div>
-                                </Fragment>
-                            )
-                        }
+                                        )
+                                    }
+                                </div>
+                            </div>
+                        </Fragment>
                     </div>
-                )
+                </>)
             }
 
             <div ref={messagesEndRef}></div>
