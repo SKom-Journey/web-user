@@ -1,10 +1,13 @@
 import Spinnner from "@/components/Spinner";
 import { ICart } from "@/interfaces/ICart";
 import { IOrder } from "@/interfaces/IOrder";
+import { createOrder } from "@/services/order_service";
 import { getUserInfo } from "@/services/session_service";
 import { getTableNumber } from "@/services/table_service";
+import { successToast } from "@/services/toast_service";
 import localizeNumber from "@/utils/localize_number";
 import { FC, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface OrderButtonComponentProps {
     orders: ICart[];
@@ -13,6 +16,7 @@ interface OrderButtonComponentProps {
 export const OrderButton: FC<OrderButtonComponentProps> = ({
     orders
 }) => {
+    const navigate = useNavigate();
     const [seconds, setSeconds] = useState(4);
     const [loading, setLoading] = useState(false);
     const [disabled, setDisabled] = useState(false);
@@ -58,13 +62,15 @@ export const OrderButton: FC<OrderButtonComponentProps> = ({
         
         for(const order of orders) {
             data.items.push({
-                id: order.id,
+                id: order.menu_id,
                 note: order.note,
                 total: order.quantity
             });
         }
 
-        console.log(data);
+        await createOrder(data);
+        navigate('/order-success');
+        successToast("Order Placed Successfully!")
     }
 
     return (

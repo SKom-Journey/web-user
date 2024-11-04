@@ -1,15 +1,19 @@
 import { CheckMarkIcon, EditIcon, TimesIcon } from "@/components/Icons";
 import { TextInputSM } from "@/config/theme";
+import { ICart } from "@/interfaces/ICart";
 import { updateCartNote } from "@/services/cart_service";
-import { FC, FormEvent, useRef, useState } from "react";
+import { successToast } from "@/services/toast_service";
+import { Dispatch, FC, FormEvent, SetStateAction, useRef, useState } from "react";
 
 interface OrderNoteProps {
+    setOrders: Dispatch<SetStateAction<ICart[]>>;
     note: string;
     cartId: string;
 }
 
 const OrderNote: FC<OrderNoteProps> = ({
     note,
+    setOrders,
     cartId
 }) => {
     const [editMode, setEditMode] = useState(false);
@@ -27,7 +31,15 @@ const OrderNote: FC<OrderNoteProps> = ({
         e.preventDefault();
 
         await updateCartNote(cartId, noteRef.current!.value);
+        setOrders(order => 
+            order.map(o => 
+                o.id === cartId 
+                    ? { ...o, note: noteRef.current!.value } 
+                    : o
+            )
+        );
         setEditMode(false);
+        successToast("Note Updated!");
     }
 
     return (

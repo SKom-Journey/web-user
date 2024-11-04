@@ -55,7 +55,7 @@ export const OrderSummary: FC<OrderSummaryComponentProps> = ({
                                 </div>
                             </div>
 
-                            <OrderNote cartId={o.id} note={o.note} />
+                            <OrderNote setOrders={setOrders} cartId={o.id} note={o.note} />
                         </Fragment>
                     ))
                 }
