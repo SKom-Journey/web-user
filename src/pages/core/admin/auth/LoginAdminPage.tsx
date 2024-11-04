@@ -1,15 +1,22 @@
 import Logo from "@/assets/images/ryomu-logo.png"
 import { ButtonLargeTransparent, TextInputSM } from "@/config/theme";
+import { loginAdmin } from "@/services/auth_service";
+import { storeSession } from "@/services/session_service";
 import { FormEvent, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginAdminPage() {
-
+    const navigate = useNavigate();
     const usernameRef = useRef<HTMLInputElement | null>(null);
     const passwordRef = useRef<HTMLInputElement | null>(null);
 
-    async function submit(e: FormEvent) {
+    async function submit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        console.log(usernameRef.current?.value, passwordRef.current?.value);
+        const req = await loginAdmin(usernameRef.current!.value, passwordRef.current!.value);
+        if(!req.error) {
+            storeSession(req.data, "token");
+            navigate("/admin");
+        }
     }
 
     return(

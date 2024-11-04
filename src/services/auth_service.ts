@@ -47,3 +47,26 @@ export async function login(email: string, password: string): Promise<IResponse>
         }
     }
 }
+
+export async function loginAdmin(username: string, password: string): Promise<IResponse> {
+    try {
+        const req = await axiosConfig.post("/auths/admins/login", {
+            username,
+            password
+        });
+
+        if(req.data.error) {
+            errorToast(req.data.data);
+        }
+
+        return req.data;
+    } catch (error) {
+        console.error(error);
+        errorToast();
+        return {
+            data: null,
+            error: true,
+            status: "ERROR"
+        }
+    }
+}
