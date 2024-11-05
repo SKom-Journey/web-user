@@ -9,7 +9,7 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, activePath }) => {
    return (
       <aside className={`fixed z-40 left-0 w-64 h-full bg-red-400 shadow ${isOpen ? "translate-x-0" : "-translate-x-full"} transition-transform duration-200 sm:translate-x-0 sm:block`}>
-         <div className="h-full px-3 py-8 overflow-y-auto bg-white">
+         <div className="h-full px-3 py-20 overflow-y-auto bg-white">
             <ul className="space-y-5 font-medium">
                <li>
                   <NavLink to="/admin/manage-qr" className={`flex items-center p-4 rounded-lg group ${activePath === "/admin/manage-qr" ? 'bg-red-100 text-red-600' : 'text-gray-700'}`}>

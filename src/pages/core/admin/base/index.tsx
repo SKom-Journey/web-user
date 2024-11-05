@@ -14,8 +14,8 @@ export const BaseAdmin: React.FC = () => {
       <>
          <NavbarAdmin toggleSidebar={toggleSidebar} />
          <Sidebar isOpen={isSidebarOpen} activePath={location.pathname} />
-         <div className="sm:ml-64">
-            <div className="mt-[3.5rem] p-5 overflow-hidden">
+         <div className="sm:ml-64 overflow-hidden">
+            <div className="mt-[3.5rem] p-5">
                <Outlet />
             </div>
          </div>
