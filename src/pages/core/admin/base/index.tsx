@@ -1,16 +1,25 @@
 import { NavbarAdmin } from "@/components/base/navbar/NavbarAdmin"
 import { Sidebar } from "@/components/base/sidebar/Sidebar"
-import { useState } from "react";
-import { Outlet, useLocation } from "react-router-dom"
+import { checkUserSession } from "@/services/session_service";
+import { useEffect, useState } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom"
 import { ToastContainer } from "react-toastify";
 
 export const BaseAdmin: React.FC = () => {
    const location = useLocation()
    const [isSidebarOpen, setSidebarOpen] = useState(false);
+   const navigate = useNavigate();
 
-   const toggleSidebar = () => {
+   function toggleSidebar() {
       setSidebarOpen(!isSidebarOpen);
-   };
+   }
+
+   useEffect(() => {
+      if(!checkUserSession()) {
+         navigate("/auth-admin");
+      }
+   }, []);
+   
    return (
       <>
          <NavbarAdmin toggleSidebar={toggleSidebar} />
