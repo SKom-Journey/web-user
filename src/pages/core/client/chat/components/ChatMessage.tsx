@@ -1,19 +1,10 @@
 import ChatIcon from "@/assets/images/chat.png";
 import { Dispatch, FC, Fragment, SetStateAction, useEffect, useRef, useState } from "react";
-import { AddToCartIcon, CircleMinusSMIcon, CirclePlusSMIcon } from "@/components/Icons";
 import io, { Socket } from 'socket.io-client';
-import { IMenu } from "@/interfaces/IMenu";
 import { IResponse } from "@/interfaces/IResponse";
 import websocketConfig from "@/config/websocket";
 import { Loader } from "@/components/Loader";
 import truncateText from "@/utils/truncate_text";
-import storeUserChatbotChat from "@/services/store_user_chatbot_chat";
-import storeChatbotChat from "@/services/store_chatbot_chat";
-import getUserChatbotChat from "@/services/get_user_chatbot_chat";
-import getChatbotChat from "@/services/get_chatbot_chat";
-import clearChatbotChat from "@/services/clear_chatbot_chat";
-import getMenu from "@/services/get_menu";
-import storeMenu from "@/services/store_menu";
 import { IMenuOrder } from "@/interfaces/IMenuOrder";
 import AddToCartButton from "@/components/AddToCartButton";
 import { ICart } from "@/interfaces/ICart";
@@ -30,10 +21,6 @@ interface ChatMessageComponentProps {
     triggerClearChat: boolean;
 }
 
-interface ChatMessageMenu extends IMenu {
-    total: number;
-}
-
 export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ 
     setTriggerClearChat, 
     commandToChatbot, 
@@ -46,17 +33,9 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
     const [carts, setCarts] = useState<ICart[]>([]);
     const [cartUpdated, setCartUpdated] = useState<boolean>(false);
     const [cartUpdating, setCartUpdating] = useState<boolean>(false);
-    const [recipientChats, setRecipientChats] = useState<ChatMessageMenu[][]>([]);
-    const [senderChats, setSenderChats] = useState<string[]>(getUserChatbotChat());
-    const [showTotalInputToMenuId, setShowTotalInputToMenuId] = useState<string>("");
     const [editedMenu, setEditedMenu] = useState<IMenuOrder | null>(null);
     const socket = useRef<Socket | null>(null);
     const messagesEndRef = useRef<null | HTMLDivElement>(null);
-    const scrollToBottom = () => {
-        setTimeout(() => {
-            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-        }, 50);
-    }
 
     useEffect(() => {
         getChats();
@@ -83,9 +62,7 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
         
         // Listen for the recommendation response
         connectToSocket.on(websocketConfig.menuRecommendation.on, (data: IResponse) => {
-            setRecipientChats(prevChats => [...prevChats, data.data]);
-            storeChatbotChat(data.data);
-            setTotalForEachMenuByCart();
+            setChats(chats => [...chats, data.data[0]]);
             scrollToBottom();
         });
         
@@ -97,10 +74,6 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
 
     useEffect(() => {
         if(triggerClearChat) {
-            clearChatbotChat();
-            setRecipientChats([]);
-            setSenderChats([]);
-            setShowTotalInputToMenuId("");
             setEditedMenu(null);
             setShowRecommendedCommands(true);
             setTriggerClearChat(false);
@@ -109,10 +82,7 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
     
     useEffect(() => {
         if(commandToChatbot.length > 0) {
-            setShowTotalInputToMenuId("");
             setEditedMenu(null);
-            setSenderChats([...senderChats, commandToChatbot]);
-            storeUserChatbotChat(commandToChatbot);
             socket.current?.emit(websocketConfig.menuRecommendation.emit, commandToChatbot, getUserInfo().id);
             scrollToBottom();
         }
@@ -120,29 +90,22 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
 
     useEffect(() => {
         if (editedMenu != null) {
-            storeMenu(editedMenu);
-            setTotalForEachMenuByCart();
+            scrollToBottom();
         }
     }, [editedMenu]);
+
+    function scrollToBottom() {
+        setTimeout(() => {
+            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        }, 50);
+    }
 
     async function getChats() {
         const chats = await getUserChats();
         setChats(chats.data);
-    }
-
-    function setTotalForEachMenuByCart() {
-        const cart = getMenu();
-        const chatbotChat = getChatbotChat().map(c => {
-            return c.map(c => {
-                const getById = cart.find(cart => c.id === cart.id);
-                return {
-                    ...c, 
-                    total: getById?.total ?? 0
-                }
-            });
-        });
-        setRecipientChats(chatbotChat);
-        scrollToBottom();
+        if(chats.data.length === 0) {
+            setShowRecommendedCommands(true);
+        }
     }
 
     return (
@@ -213,7 +176,7 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
                                                                     <div className="mt-1 text-xs text-slate-500">{truncateText(menu.description, 55)}</div>
                                                                 </div>
                                                             </a>
-                                                            <div className={`${showTotalInputToMenuId === menu.id ? 'w-3/12': 'w-2/12'} flex px-2 items-center justify-center`}>
+                                                            <div className={`flex px-2 items-center justify-center`}>
                                                                 <AddToCartButton menu={menu} key={i} carts={carts} cartUpdating={cartUpdating} setCartUpdated={setCartUpdated} />
                                                             </div>
                                                         </div>
