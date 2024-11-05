@@ -78,6 +78,8 @@ const router = createBrowserRouter([
       ]
    },
    {
+   },
+   {
       path: '/admin',
       element: <BaseAdmin />,
       children: [
