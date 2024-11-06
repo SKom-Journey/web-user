@@ -14,9 +14,11 @@ import {
    faCartPlus,
    faCheckCircle,
    faTimesCircle,
-   faPrint
+   faPrint,
+   faClock
 } from '@fortawesome/free-solid-svg-icons'
 
+export const ClockIcon = () => <FontAwesomeIcon icon={faClock} />
 export const ArrowLeftIcon = () => <FontAwesomeIcon icon={faArrowLeft} />
 export const CommentIcon = () => <FontAwesomeIcon icon={faComment} style={{ color: '#FFFFFF' }} />
 export const HomeIcon = () => <FontAwesomeIcon icon={faHome} style={{ color: '#FFFFFF' }} />

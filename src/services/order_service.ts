@@ -22,3 +22,43 @@ export async function createOrder(data: IOrder): Promise<IResponse> {
         }
     }
 }
+
+export async function finishOrder(id: string): Promise<IResponse> {
+    try {
+        const req = await axiosConfig.put(`/orders/${id}`);
+
+        if(req.data.error) {
+            errorToast(req.data.data);
+        }
+
+        return req.data;
+    } catch (error) {
+        console.error(error);
+        errorToast();
+        return {
+            data: null,
+            error: true,
+            status: "ERROR"
+        }
+    }
+}
+
+export async function getOrders(): Promise<IResponse> {
+    try {
+        const req = await axiosConfig.get("/orders");
+
+        if(req.data.error) {
+            errorToast(req.data.data);
+        }
+
+        return req.data;
+    } catch (error) {
+        console.error(error);
+        errorToast();
+        return {
+            data: null,
+            error: true,
+            status: "ERROR"
+        }
+    }
+}

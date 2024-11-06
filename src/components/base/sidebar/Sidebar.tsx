@@ -23,7 +23,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, activePath }) => {
                      <span className="ms-3 text-sm font-light">Incoming Order</span>
                   </NavLink>
                </li>
-               <li>
+               {/* <li>
                   <NavLink to="/admin/manage-category" className={`flex items-center p-4 rounded-lg group ${activePath === "/admin/manage-category" ? 'bg-red-100 text-red-600' : 'text-gray-700'}`}>
                      <Layers3 size={16} strokeWidth={1} className={activePath === "/admin/manage-category" ? 'text-red-600' : 'text-gray-700'} />
                      <span className="ms-3 text-sm font-light">Manage Category</span>
@@ -34,7 +34,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, activePath }) => {
                      <NotebookText size={16} strokeWidth={1} className={activePath === "/admin/manage-menu" ? 'text-red-600' : 'text-gray-700'} />
                      <span className="ms-3 text-sm font-light">Manage Menu</span>
                   </NavLink>
-               </li>
+               </li> */}
             </ul>
          </div>
       </aside>
