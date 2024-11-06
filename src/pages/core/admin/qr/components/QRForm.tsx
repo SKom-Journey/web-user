@@ -41,7 +41,7 @@ const QRForm: FC<QRFormProps> = ({
     }
 
     return <TableRow>
-        <TableCell></TableCell>
+        <TableCell>#</TableCell>
 
         <TableCell>
             <input ref={inputRef} defaultValue={input} type="text" className={`${TextInputSM} border text-sm`} placeholder="Enter Table Number" />

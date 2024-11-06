@@ -22,6 +22,26 @@ export async function getQrs(): Promise<IResponse> {
     }
 }
 
+export async function deleteQr(id: string): Promise<IResponse> {
+    try {
+        const req = await axiosConfig.delete(`/qrs/${id}`);
+
+        if(req.data.error) {
+            errorToast(req.data.data);
+        }
+
+        return req.data;
+    } catch (error) {
+        console.error(error);
+        errorToast();
+        return {
+            data: null,
+            error: true,
+            status: "ERROR"
+        }
+    }
+}
+
 export async function createQr(number: string): Promise<IResponse> {
     try {
         const req = await axiosConfig.post("/qrs", {
