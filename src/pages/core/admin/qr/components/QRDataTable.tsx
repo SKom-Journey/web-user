@@ -1,4 +1,4 @@
-import { PrintIcon, TrashIcon } from "@/components/Icons";
+import { PrintIcon, TrashIconRed } from "@/components/Icons";
 import { Checkbox } from "@/components/ui/checkbox"
 import {
    Table,
@@ -133,7 +133,7 @@ export default function QRDataTable() {
                            </button>
 
                            <button title="Delete">
-                              <TrashIcon />
+                              <TrashIconRed />
                            </button>
                         </TableCell>
                      </TableRow>

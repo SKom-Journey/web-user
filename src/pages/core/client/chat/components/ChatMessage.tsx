@@ -5,12 +5,12 @@ import { IResponse } from "@/interfaces/IResponse";
 import websocketConfig from "@/config/websocket";
 import { Loader } from "@/components/Loader";
 import truncateText from "@/utils/truncate_text";
-import { IMenuOrder } from "@/interfaces/IMenuOrder";
 import AddToCartButton from "@/components/AddToCartButton";
 import { ICart } from "@/interfaces/ICart";
 import { getUserInfo } from "@/services/session_service";
 import { getUserChats } from "@/services/chat_service";
 import { IChat } from "@/interfaces/IChat";
+import { getCartsByUserId } from "@/services/cart_service";
 
 interface ChatMessageComponentProps {
     commandToChatbot: string;
@@ -31,13 +31,15 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
 }) => {
     const [chats, setChats] = useState<IChat[]>([]);
     const [carts, setCarts] = useState<ICart[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [cartUpdated, setCartUpdated] = useState<boolean>(false);
     const [cartUpdating, setCartUpdating] = useState<boolean>(false);
-    const [editedMenu, setEditedMenu] = useState<IMenuOrder | null>(null);
+    const [lastCommand, setLastCommand] = useState<string>("");
     const socket = useRef<Socket | null>(null);
     const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
     useEffect(() => {
+        getCarts();
         getChats();
 
         const connectToSocket = io(websocketConfig.baseUrl, {autoConnect: true, transports: ['websocket']});
@@ -63,6 +65,7 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
         // Listen for the recommendation response
         connectToSocket.on(websocketConfig.menuRecommendation.on, (data: IResponse) => {
             setChats(chats => [...chats, data.data[0]]);
+            setIsLoading(false);
             scrollToBottom();
         });
         
@@ -74,7 +77,7 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
 
     useEffect(() => {
         if(triggerClearChat) {
-            setEditedMenu(null);
+            setChats([]);
             setShowRecommendedCommands(true);
             setTriggerClearChat(false);
         }
@@ -82,17 +85,18 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
     
     useEffect(() => {
         if(commandToChatbot.length > 0) {
-            setEditedMenu(null);
             socket.current?.emit(websocketConfig.menuRecommendation.emit, commandToChatbot, getUserInfo().id);
+            setLastCommand(commandToChatbot);
+            setIsLoading(true);
             scrollToBottom();
         }
     }, [commandToChatbot]);
 
     useEffect(() => {
-        if (editedMenu != null) {
-            scrollToBottom();
+        if(cartUpdated) {
+            getCarts();
         }
-    }, [editedMenu]);
+     }, [cartUpdated])
 
     function scrollToBottom() {
         setTimeout(() => {
@@ -106,6 +110,14 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
         if(chats.data.length === 0) {
             setShowRecommendedCommands(true);
         }
+    }
+    
+    async function getCarts() {
+        setCartUpdating(true);
+        const carts = await getCartsByUserId();
+        setCarts(carts.data);
+        setCartUpdated(false);
+        setCartUpdating(false);
     }
 
     return (
@@ -190,6 +202,26 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
                         </Fragment>
                     </div>
                 </>)
+            }
+
+            {
+                isLoading &&
+                <div className="flex flex-col space-y-4 px-3 py-5 mb-15">
+                    <div className="flex justify-end">
+                        <div className="max-w-xs bg-blue-500 text-white p-3 rounded-lg rounded-br-none shadow text-sm">
+                            {lastCommand}
+                        </div>
+                    </div>
+
+                    <div className="flex items-start">
+                        <img width={30} className="mr-3" src={ChatIcon} alt="Recipient profile picture" />
+                        <div className="max-w-xs">
+                            <div className="bg-slate-300 text-gray-900 p-3 rounded-lg rounded-bl-none shadow text-sm">
+                                <Loader />
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
 
             <div ref={messagesEndRef}></div>
