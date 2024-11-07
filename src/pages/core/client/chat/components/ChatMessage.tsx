@@ -124,11 +124,11 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
     return (
         <div className="h-full">
             {
-                chats.length === 0 && (
+                chats.length === 0 && !isLoading && (
                     <div className="h-full flex flex-wrap justify-center items-center">
                         <center>
                             {
-                                isWSConnected && !isLoading && (<>
+                                isWSConnected && (<>
                                     <img className="w-1/2" src={ChatIcon} alt="Chat Icon" />
                                     <div className="mt-6 text-sm">Hello, what can i do for you?</div>
                                 </>
