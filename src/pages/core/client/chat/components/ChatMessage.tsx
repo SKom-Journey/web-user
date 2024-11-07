@@ -8,7 +8,7 @@ import truncateText from "@/utils/truncate_text";
 import AddToCartButton from "@/components/AddToCartButton";
 import { ICart } from "@/interfaces/ICart";
 import { getUserInfo } from "@/services/session_service";
-import { getUserChats } from "@/services/chat_service";
+import { deleteUserChats, getUserChats } from "@/services/chat_service";
 import { IChat } from "@/interfaces/IChat";
 import { getCartsByUserId } from "@/services/cart_service";
 
@@ -80,6 +80,7 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
             setChats([]);
             setShowRecommendedCommands(true);
             setTriggerClearChat(false);
+            deleteUserChats();
         }
     }, [triggerClearChat]);
     
@@ -127,7 +128,7 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
                     <div className="h-full flex flex-wrap justify-center items-center">
                         <center>
                             {
-                                isWSConnected && (<>
+                                isWSConnected && !isLoading && (<>
                                     <img className="w-1/2" src={ChatIcon} alt="Chat Icon" />
                                     <div className="mt-6 text-sm">Hello, what can i do for you?</div>
                                 </>

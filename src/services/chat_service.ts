@@ -22,3 +22,23 @@ export async function getUserChats(): Promise<IResponse> {
         }
     }
 }
+
+export async function deleteUserChats(): Promise<IResponse> {
+    try {
+        const req = await axiosConfig.delete(`/chats/${getUserInfo().id}`);
+
+        if(req.data.error) {
+            errorToast(req.data.data);
+        }
+
+        return req.data;
+    } catch (error) {
+        console.error(error);
+        errorToast();
+        return {
+            data: null,
+            error: true,
+            status: "ERROR"
+        }
+    }
+}
