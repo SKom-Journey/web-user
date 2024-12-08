@@ -15,9 +15,11 @@ import {
    faCheckCircle,
    faTimesCircle,
    faPrint,
-   faClock
+   faClock,
+   faSearch
 } from '@fortawesome/free-solid-svg-icons'
 
+export const SearchIcon = () => <FontAwesomeIcon icon={faSearch} />
 export const ClockIcon = () => <FontAwesomeIcon icon={faClock} />
 export const ArrowLeftIcon = () => <FontAwesomeIcon icon={faArrowLeft} />
 export const CommentIcon = () => <FontAwesomeIcon icon={faComment} style={{ color: '#FFFFFF' }} />
