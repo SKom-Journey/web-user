@@ -25,3 +25,23 @@ export async function getMenus(keyword: string | undefined = undefined): Promise
         }
     }
 }
+
+export async function getMenuById(id: string): Promise<IResponse> {
+    try {
+        const req = await axiosConfig.get(`/menus/${id}`);
+
+        if(req.data.error) {
+            errorToast(req.data.data);
+        }
+
+        return req.data;
+    } catch (error) {
+        console.warn(error);
+        errorToast();
+        return {
+            data: null,
+            error: true,
+            status: "ERROR"
+        }
+    }
+}

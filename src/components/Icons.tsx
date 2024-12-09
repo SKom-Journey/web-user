@@ -16,7 +16,8 @@ import {
    faTimesCircle,
    faPrint,
    faClock,
-   faSearch
+   faSearch,
+   faEdit
 } from '@fortawesome/free-solid-svg-icons'
 
 export const SearchIcon = () => <FontAwesomeIcon icon={faSearch} />
@@ -29,6 +30,7 @@ export const TrashIcon = () => <FontAwesomeIcon icon={faTrashAlt} style={{ color
 export const TrashIconRed = () => <FontAwesomeIcon icon={faTrashAlt} style={{ color: '#C51605', height: "1rem" }} />
 export const PrintIcon = () => <FontAwesomeIcon icon={faPrint} style={{ color: '#1EC524', height: "1rem" }} />
 export const CirclePlusIcon = () => <FontAwesomeIcon icon={faCirclePlus} style={{ color: '#C51605', height: "1.5rem" }} />
+export const EditPlusIcon = () => <FontAwesomeIcon icon={faEdit} style={{ color: '#C51605', height: "1rem" }} />
 export const CirclePlusSMIcon = () => <FontAwesomeIcon icon={faCirclePlus} style={{ color: '#C51605', height: "1rem" }} />
 export const CircleMinusSMIcon = () => <FontAwesomeIcon icon={faCircleMinus} style={{ color: '#C51605', height: "1rem" }} />
 export const PaperPlaneIcon = () => <FontAwesomeIcon icon={faPaperPlane} style={{ color: '#FFFFFF' }} />

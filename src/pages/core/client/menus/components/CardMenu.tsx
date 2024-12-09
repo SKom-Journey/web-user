@@ -19,23 +19,22 @@ interface CardMenuProps {
 
 export const CardMenu: React.FC<CardMenuProps> = ({ menu, carts, setCartUpdated, cartUpdating }) => {
    return (
-      <Link to={'#'}>
-         <Card className="shadow-sm mb-3">
-            <CardHeader className="p-4">
-               <div className="flex justify-between items-center">
-                  <div className="flex">
-                     <img src={menu.img} className="me-3 rounded w-14 h-14 object-cover" alt="menu.jpg" />
-                     <div className="flex flex-col">
-                        <CardTitle className="mb-1">{menu.title}</CardTitle>
-                        <CardDescription>Rp.{localizeNumber(menu.price)}</CardDescription>
-                     </div>
+      <Card className="shadow-sm mb-3">
+         <CardHeader className="p-4">
+            <div className="flex justify-between items-center">
+               <Link to={`/detail/${menu.id}`} className="flex w-full">
+                  <img src={menu.img} className="me-3 rounded w-14 h-14 object-cover" alt="menu.jpg" />
+                  <div className="flex flex-col">
+                     <CardTitle className="mb-1">{menu.title}</CardTitle>
+                     <CardDescription>Rp.{localizeNumber(menu.price)}</CardDescription>
                   </div>
-                  <div>
-                     <AddToCartButton cartUpdating={cartUpdating} carts={carts} menu={menu} setCartUpdated={setCartUpdated} />
-                  </div>
+               </Link>
+               
+               <div>
+                  <AddToCartButton cartUpdating={cartUpdating} carts={carts} menu={menu} setCartUpdated={setCartUpdated} />
                </div>
-            </CardHeader>
-         </Card>
-      </Link>
+            </div>
+         </CardHeader>
+      </Card>
    )
 }

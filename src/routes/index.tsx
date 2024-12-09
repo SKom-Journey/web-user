@@ -13,8 +13,24 @@ import { MenuPageAdmin } from "@/pages/core/admin/menu";
 import OrderSuccessPage from "@/pages/core/client/message/OrderSuccessPage";
 import { AuthAdmin } from "@/pages/core/admin/base/auth";
 import LoginAdminPage from "@/pages/core/admin/auth/LoginAdminPage";
+import Detail from "@/pages/core/client/base/detail";
+import MenuDetail from "@/pages/core/client/menus/components/MenuDetail";
 
 const router = createBrowserRouter([
+   {
+      path: '/detail',
+      element: <Detail />,
+      children: [
+         {
+            index: true,
+            element: <Navigate to="/menu" />
+         },
+         {
+            path: ':menuId',
+            element: <MenuDetail />
+         }
+      ]
+   },
    {
       path: '/',
       element: <Base />,
@@ -76,8 +92,6 @@ const router = createBrowserRouter([
             element: <LoginAdminPage />,
          }
       ]
-   },
-   {
    },
    {
       path: '/admin',

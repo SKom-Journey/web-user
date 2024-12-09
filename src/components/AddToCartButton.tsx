@@ -53,7 +53,7 @@ const AddToCartButton: FC<AddToCartButtonProps> = ({ menu, carts, setCartUpdated
         };
     }, []);
 
-    return <>
+    return <div>
         {
             !inputMode && carts.find(c => c.menu_id === menu.id) == null &&
                 <button className="hover:bg-gray-200 p-1 px-2 rounded-lg" type="button" onClick={showTotalInput} title="Add to cart">
@@ -69,7 +69,7 @@ const AddToCartButton: FC<AddToCartButtonProps> = ({ menu, carts, setCartUpdated
         }
 
         {
-            inputMode && <>
+            inputMode && 
                 <div className="flex justify-center items-center text-sm">
                     <button type="button" onClick={decrementTotalInput} className="my-auto" title="Remove from cart" disabled={cartUpdating}>
                         <CircleMinusSMIcon />
@@ -85,9 +85,9 @@ const AddToCartButton: FC<AddToCartButtonProps> = ({ menu, carts, setCartUpdated
                         <CirclePlusSMIcon />
                     </button>
                 </div>
-            </>
+            
         }
-    </>
+    </div>
 }
 
 export default AddToCartButton;
