@@ -1,5 +1,5 @@
-export interface IResponse {
-    data: any;
+export interface IResponse<T> {
+    data: T;
     status: string;
-    error: null | string | boolean
+    error: null | string | boolean;
 }
