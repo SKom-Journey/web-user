@@ -3,7 +3,7 @@ import { IResponse } from "@/interfaces/IResponse";
 import { errorToast } from "./toast_service";
 import { getUserInfo } from "./session_service";
 
-export async function getCartsByUserId(): Promise<IResponse> {
+export async function getCartsByUserId(): Promise<IResponse<any>> {
     try {
         const { id } = getUserInfo();
         const req = await axiosConfig.get(`/carts/${id}`);
@@ -24,7 +24,7 @@ export async function getCartsByUserId(): Promise<IResponse> {
     }
 }
 
-export async function deleteCart(menuId: string, note: string | undefined = undefined): Promise<IResponse> {
+export async function deleteCart(menuId: string, note: string | undefined = undefined): Promise<IResponse<any>> {
     try {
         const { id } = getUserInfo();
         const req = await axiosConfig.delete(`/carts`, {
@@ -51,7 +51,7 @@ export async function deleteCart(menuId: string, note: string | undefined = unde
     }
 }
 
-export async function createCart(menuId: string, note: string | undefined = undefined): Promise<IResponse> {
+export async function createCart(menuId: string, note: string | undefined = undefined): Promise<IResponse<any>> {
     try {
         const { id } = getUserInfo();
         const req = await axiosConfig.post(`/carts`, {
@@ -76,7 +76,7 @@ export async function createCart(menuId: string, note: string | undefined = unde
     }
 }
 
-export async function updateCartNote(cartId: string, note: string): Promise<IResponse> {
+export async function updateCartNote(cartId: string, note: string): Promise<IResponse<any>> {
     try {
         const req = await axiosConfig.put(`/carts/${cartId}`, {
             note

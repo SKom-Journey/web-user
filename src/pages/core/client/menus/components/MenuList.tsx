@@ -1,5 +1,5 @@
 import { IMenuList } from "@/interfaces/IMenuList";
-import { getMenus } from "@/services/menu_service";
+import { getMenuWithCategory } from "@/services/menu_service";
 import { Fragment, useEffect, useState } from "react";
 import { CardMenu } from "./CardMenu";
 import { getCartsByUserId } from "@/services/cart_service";
@@ -41,7 +41,7 @@ export default function MenuList() {
    async function setupMenus() {
       setIsEmpty(false);
       setIsLoading(true);
-      const allMenus = await getMenus();
+      const allMenus = await getMenuWithCategory();
       await setupCarts();
       setMenuItems(allMenus.data);
       setIsLoading(false);
@@ -50,7 +50,7 @@ export default function MenuList() {
    async function searchMenu() {
       setIsEmpty(false);
       setIsLoading(true);
-      const menus = await getMenus(debouncedValue);
+      const menus = await getMenuWithCategory(debouncedValue);
       
       if(menus.data.length === 0) {
          setIsEmpty(true);
@@ -72,12 +72,12 @@ export default function MenuList() {
 
    return (
       <div className="h-full overflow-hidden">
-         <div className="flex border-b py-1 mb-1 justfiy-center items-center" style={{height: '5%'}}>
+         <div className="flex border-b py-1 mb-2 justfiy-center items-center" style={{maxHeight: '6%'}}>
             <SearchIcon />
             <input value={value} onChange={(e) => setValue(e.target.value)} type="search" placeholder="Craving for something?" className={`${TextInputSM} outline-none ml-2`} />
          </div>
 
-         <div className="overflow-y-auto" style={{scrollbarWidth: "thin", height: '95%'}}>
+         <div className="overflow-y-auto" style={{scrollbarWidth: "thin", maxHeight: '94%'}}>
             {
                isLoading && 
                   <div className="h-full flex items-center justify-center">
@@ -92,7 +92,7 @@ export default function MenuList() {
                !isLoading && !isEmpty && menuItems.map((m, i) => 
                   <Fragment key={i}>
                      <h1 className="font-bold my-4 text-xl">{m.category_name ?? `Results for: ${debouncedValue}`}</h1>
-                     {m.items.map((item) => (
+                     {m.items?.map((item) => (
                         <CardMenu 
                            key={item.id} 
                            menu={{

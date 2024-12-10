@@ -1,20 +1,25 @@
 import axiosConfig from "@/config/axios";
-import { IResponse } from "@/interfaces/IResponse";
 import { errorToast } from "./toast_service";
 import { IMenu } from "@/interfaces/IMenu";
 
-export const getMenus = async (keyword: string | undefined = undefined): Promise<IResponse<IMenu[]>> => {
+export const getMenuWithCategory = async (keyword: string | undefined = undefined) => {
     try {
-        const req = await axiosConfig.get("/menus/all", {
+        const req = await axiosConfig.get("/menus", {
             params: {
                 keyword
             }
         });
+        return req.data;
+    } catch (error) {
+        console.error(error);
+        errorToast(); 
+        throw error; 
+    }
+}
 
-        if (req.data.error) {
-            errorToast(req.data.data); 
-        }
-        
+export const getMenus = async () => {
+    try {
+        const req = await axiosConfig.get("/menus/all");
         return req.data;
     } catch (error) {
         console.error(error);
@@ -48,7 +53,7 @@ export const updateMenus = async (menu_id: string,menuData: IMenu) => {
 export const deleteMenus = async (menu_id: string) => {
     try {
         const req = await axiosConfig.delete(`/menus/${menu_id}`);
-        return req
+        return req.data;
     } catch (error) {
         console.error(error);
         errorToast(); 
@@ -56,14 +61,9 @@ export const deleteMenus = async (menu_id: string) => {
     }
 }
 
-export async function getMenuById(id: string): Promise<IResponse> {
+export async function getMenuById(id: string) {
     try {
         const req = await axiosConfig.get(`/menus/${id}`);
-
-        if(req.data.error) {
-            errorToast(req.data.data);
-        }
-
         return req.data;
     } catch (error) {
         console.warn(error);
