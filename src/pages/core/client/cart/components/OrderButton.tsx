@@ -68,7 +68,7 @@ export const OrderButton: FC<OrderButtonComponentProps> = ({
                 id: order.menu_id,
                 note: order.note,
                 total: order.quantity,
-                detail: menuDetail
+                detail: menuDetail.data
             });
         }
 
