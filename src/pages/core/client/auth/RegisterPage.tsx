@@ -6,7 +6,6 @@ import { loginWithGoogleOauth, register } from "@/services/auth_service";
 import { useNavigate } from "react-router-dom";
 import { errorToast, successToast } from "@/services/toast_service";
 import { useGoogleLogin } from "@react-oauth/google";
-import axios from "axios";
 import { storeSession } from "@/services/session_service";
 
 export default function RegisterPage() {
