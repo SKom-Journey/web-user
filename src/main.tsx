@@ -5,8 +5,11 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import router from '@/routes';
 import './index.css'
 import '@/assets/css/custom.css'
+import Modal from 'react-modal';
 
 const queryClient = new QueryClient()
+
+Modal.setAppElement('#wrapper');
 
 createRoot(document.getElementById('wrapper')!).render(
   <StrictMode>
