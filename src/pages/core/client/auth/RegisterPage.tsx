@@ -2,9 +2,12 @@ import { ButtonLarge, TextInput } from "@/config/theme";
 import RyomuRed from "@/assets/images/ryomu-logo-red.png";
 import Google from "@/assets/images/goggle.png";
 import { FormEvent, useRef } from "react";
-import { register } from "@/services/auth_service";
+import { loginWithGoogleOauth, register } from "@/services/auth_service";
 import { useNavigate } from "react-router-dom";
-import { successToast } from "@/services/toast_service";
+import { errorToast, successToast } from "@/services/toast_service";
+import { useGoogleLogin } from "@react-oauth/google";
+import axios from "axios";
+import { storeSession } from "@/services/session_service";
 
 export default function RegisterPage() {
     const navigate = useNavigate();
@@ -20,6 +23,17 @@ export default function RegisterPage() {
             navigate("/auth/login");
         }
     }
+
+    const login = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+            const user = await loginWithGoogleOauth(tokenResponse.access_token);
+            storeSession(user.data, "token");
+            navigate("/menu");
+        },
+        onError: (error) => {
+            errorToast(error.error_description);
+        },
+    });
 
     return(
         <div className="flex justify-center items-center bg-[#C51605] h-full">
@@ -39,7 +53,7 @@ export default function RegisterPage() {
                 
                 <div className="mb-4">
                     <button type="submit" title="Login" className={`mb-6 ${ButtonLarge}`}>Register</button>
-                    <button type="button" title="Sign up with Google" className={`${ButtonLarge} flex items-center justify-center`}><img src={Google} className="mr-2" alt="" /> Sign up with Google</button>
+                    <button onClick={() => login()} type="button" title="Sign up with Google" className={`${ButtonLarge} flex items-center justify-center`}><img src={Google} className="mr-2" alt="" /> Sign up with Google</button>
                     <div className="mt-8 text-center">
                         <a title="Already have an account?" className="underline font-semibold" href="/auth/login">Already have an account?</a>
                     </div>

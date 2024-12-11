@@ -3,8 +3,10 @@ import { ButtonLarge, TextInput } from "@/config/theme";
 import Google from "@/assets/images/goggle.png";
 import { FormEvent, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { login } from "@/services/auth_service";
+import { login, loginWithGoogleOauth } from "@/services/auth_service";
 import { storeSession } from "@/services/session_service";
+import { useGoogleLogin } from "@react-oauth/google";
+import { errorToast } from "@/services/toast_service";
 
 export default function LoginUserPage() {
     const navigate = useNavigate();
@@ -20,6 +22,17 @@ export default function LoginUserPage() {
             navigate("/menu");
         }
     }
+
+    const loginWithGoogle = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+            const user = await loginWithGoogleOauth(tokenResponse.access_token);
+            storeSession(user.data, "token");
+            navigate("/menu");
+        },
+        onError: (error) => {
+            errorToast(error.error_description);
+        },
+    });
 
     return(
         <div className="flex justify-center items-center bg-[#C51605] h-full">
@@ -39,7 +52,7 @@ export default function LoginUserPage() {
                 
                 <div className="mb-4">
                     <button type="submit" title="Login" className={`mb-6 ${ButtonLarge}`}>Login</button>
-                    <button type="button" title="Sign in with Google" className={`${ButtonLarge} flex items-center justify-center`}><img src={Google} className="mr-2" alt="" /> Sign in with Google</button>
+                    <button onClick={() => loginWithGoogle()} type="button" title="Sign in with Google" className={`${ButtonLarge} flex items-center justify-center`}><img src={Google} className="mr-2" alt="" /> Sign in with Google</button>
                     <div className="mt-8 text-center">
                         <a title="Dont have an account yet?" className="underline font-semibold" href="/auth/register">Dont have an account yet?</a>
                     </div>
