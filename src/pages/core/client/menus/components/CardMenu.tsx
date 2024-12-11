@@ -20,9 +20,9 @@ interface CardMenuProps {
 export const CardMenu: React.FC<CardMenuProps> = ({ menu, carts, setCartUpdated, cartUpdating }) => {
    return (
       <Card className="shadow-sm mb-3">
-         <CardHeader className="p-4">
+         <CardHeader className="p-0">
             <div className="flex justify-between items-center">
-               <Link to={`/detail/${menu.id}`} className="flex w-full">
+               <Link to={`/detail/${menu.id}`} className="flex w-full hover:bg-slate-200 rounded p-4">
                   <img src={menu.img} className="me-3 rounded w-14 h-14 object-cover" alt="menu.jpg" />
                   <div className="flex flex-col">
                      <CardTitle className="mb-1">{menu.title}</CardTitle>
@@ -30,7 +30,7 @@ export const CardMenu: React.FC<CardMenuProps> = ({ menu, carts, setCartUpdated,
                   </div>
                </Link>
                
-               <div>
+               <div className="px-6">
                   <AddToCartButton cartUpdating={cartUpdating} carts={carts} menu={menu} setCartUpdated={setCartUpdated} />
                </div>
             </div>

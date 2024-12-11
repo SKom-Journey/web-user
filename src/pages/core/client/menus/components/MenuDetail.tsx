@@ -8,43 +8,49 @@ import { TextInputSM } from "@/config/theme";
 import { getCartsByUserId, updateCartNote } from "@/services/cart_service";
 import { ICart } from "@/interfaces/ICart";
 import { successToast } from "@/services/toast_service";
+import AddToCartButtonLarge from "@/components/AddToCartButtonLarge";
 
 export default function MenuDetail() {
     const params = useParams();
     const [showForm, setShowForm] = useState<boolean>(false);
     const [menu, setMenu] = useState<IMenu>();
-    const [cart, setCart] = useState<ICart>();
+    const [cartUpdated, setCartUpdated] = useState<boolean>(false);
+    const [cart, setCart] = useState<ICart | null>(null);
     const noteInput = useRef<HTMLInputElement | null>(null);
     const menuId = params.menuId;
 
     useEffect(() => {
         getMenu();
-        getCarts();
     }, []);
+    
+    useEffect(() => {
+        if(cartUpdated) {
+            getCarts();
+            setCartUpdated(false);
+        }
+    }, [cartUpdated]);
 
     async function getMenu() {
         if(menuId) {
             const data = await getMenuById(menuId);
             setMenu(data.data);
+            await getCarts();
         }
     }
 
     async function getCarts() {
         const data = await getCartsByUserId();
         const item = data.data.find((c: ICart) => c.menu!.id == menuId);
-        if(item) {
-            setCart(item);
-            editNoteState(item.note);
-        }
+        setCart(item);
+        editNoteState(item ? item.note : '');
     }
 
     function editNoteState(note: string) {
         setMenu((menu) => {
-            if (menu != null) {
-                return {
-                    ...menu,
-                    note,
-                };
+            const newMenu = menu;
+            if (newMenu != null) {
+                newMenu.note = note;
+                return {...newMenu};
             }
             return menu;
         });
@@ -56,6 +62,7 @@ export default function MenuDetail() {
             await updateCartNote(cartId, noteInput.current?.value!);
             editNoteState(noteInput.current?.value!);
             setShowForm(false);
+            await getCarts();
             successToast('Note Updated!');
         }
     }
@@ -65,6 +72,7 @@ export default function MenuDetail() {
             await updateCartNote(cartId, '');
             editNoteState('');
             setShowForm(false);
+            await getCarts();
             successToast('Note Deleted!');
         }
     }
@@ -84,7 +92,10 @@ export default function MenuDetail() {
                     <div className="font-semibold">Note to restaurant</div>
                     <div>
                         {
-                            !showForm && <button title="Edit Note" onClick={() => setShowForm(true)}><EditPlusIcon /></button>
+                            !showForm && cart?.id == null && <div className="text-xs text-slate-400 italic">Item not added to cart yet</div>
+                        }
+                        {
+                            !showForm && cart?.id != null && <button title="Edit Note" onClick={() => setShowForm(true)}><EditPlusIcon /></button>
                         }
                         {
                             showForm && <button title="Cancel" onClick={() => setShowForm(false)}><TimesIcon /></button>
@@ -109,17 +120,10 @@ export default function MenuDetail() {
             </div>
 
             <div className="bottom-0 pb-3 px-5">
-                <button
-                    type="button"
-                    title="Add To Cart"
-                    className="flex mt-8 w-full rounded-full py-3 font-bold flex items-center justify-center text-white bg-[#C51605] hover:bg-red-800"
-                >
-                    <div>Add To Cart</div>
-                    {
-                        cart?.quantity != null && cart.quantity > 0 &&
-                            <div className="ml-1">({cart?.quantity})</div>
-                    }
-                </button>
+                {
+                    menu != null &&
+                        <AddToCartButtonLarge cart={cart} menuId={menu.id} setCartUpdated={setCartUpdated} />
+                }
             </div>
         </div>
     )

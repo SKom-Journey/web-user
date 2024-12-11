@@ -31,7 +31,7 @@ const AddToCartButton: FC<AddToCartButtonProps> = ({ menu, carts, setCartUpdated
 
     async function decrementTotalInput() {
         setIsLoading(true);
-        await deleteCart(menu.id);
+        await deleteCart(menu.id, carts.find(c => c.menu?.id == menu.id)?.note);
         setCartUpdated(true);
         setIsLoading(false);
         resetCooldown();
@@ -39,7 +39,7 @@ const AddToCartButton: FC<AddToCartButtonProps> = ({ menu, carts, setCartUpdated
     
     async function incrementTotalInput() {
         setIsLoading(true);
-        await createCart(menu.id);
+        await createCart(menu.id, carts.find(c => c.menu?.id == menu.id)?.note);
         setCartUpdated(true);
         setIsLoading(false);
         resetCooldown();
