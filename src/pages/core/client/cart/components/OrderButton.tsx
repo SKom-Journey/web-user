@@ -1,6 +1,7 @@
 import Spinnner from "@/components/Spinner";
 import { ICart } from "@/interfaces/ICart";
 import { IOrder } from "@/interfaces/IOrder";
+import { getMenuById } from "@/services/menu_service";
 import { createOrder } from "@/services/order_service";
 import { getUserInfo } from "@/services/session_service";
 import { getTableNumber } from "@/services/table_service";
@@ -31,21 +32,21 @@ export const OrderButton: FC<OrderButtonComponentProps> = ({
         setSeconds(4);
         setLoading(true);
 
-        if(timer.current != null) {
+        if (timer.current != null) {
             clearTimeout(timer.current);
             timer.current = null;
             setLoading(false);
             return;
         }
-        
-        if(interval.current != null) {
+
+        if (interval.current != null) {
             clearInterval(interval.current);
         }
-        
+
         interval.current = setInterval(() => {
             setSeconds(prevSeconds => prevSeconds - 1);
         }, 1000);
-        
+
         timer.current = setTimeout(() => {
             setLoading(false);
             sendOrder();
@@ -55,16 +56,19 @@ export const OrderButton: FC<OrderButtonComponentProps> = ({
     async function sendOrder() {
         setDisabled(true);
         const data: IOrder = {
+            user_name: '',
             items: [],
             table_number: getTableNumber()!,
             user_id: getUserInfo().id
         };
-        
-        for(const order of orders) {
+
+        for (const order of orders) {
+            const menuDetail = await getMenuById(order.menu_id);
             data.items.push({
                 id: order.menu_id,
                 note: order.note,
-                total: order.quantity
+                total: order.quantity,
+                detail: menuDetail
             });
         }
 
@@ -74,9 +78,9 @@ export const OrderButton: FC<OrderButtonComponentProps> = ({
     }
 
     return (
-        <button 
-            type="button" 
-            title="Place order" 
+        <button
+            type="button"
+            title="Place order"
             className={`mt-8 w-full rounded-full py-3 font-bold flex items-center justify-center text-white bg-[#C51605] relative ${disabled ? 'opacity-80' : 'hover:bg-primary/90'}`}
             onClick={handleOrderClick}
             disabled={disabled}
