@@ -3,7 +3,7 @@ import { IResponse } from "@/interfaces/IResponse";
 import { errorToast } from "./toast_service";
 import { IOrder } from "@/interfaces/IOrder";
 
-export async function createOrder(data: IOrder): Promise<IResponse> {
+export async function createOrder(data: IOrder): Promise<IResponse<any>> {
     try {
         const req = await axiosConfig.post("/orders", data);
 
@@ -23,7 +23,7 @@ export async function createOrder(data: IOrder): Promise<IResponse> {
     }
 }
 
-export async function finishOrder(id: string): Promise<IResponse> {
+export async function finishOrder(id: string): Promise<IResponse<any>> {
     try {
         const req = await axiosConfig.put(`/orders/${id}`);
 
@@ -43,7 +43,7 @@ export async function finishOrder(id: string): Promise<IResponse> {
     }
 }
 
-export async function getOrders(): Promise<IResponse> {
+export async function getOrders(): Promise<IResponse<any>> {
     try {
         const req = await axiosConfig.get("/orders");
 

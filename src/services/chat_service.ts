@@ -3,7 +3,7 @@ import { IResponse } from "@/interfaces/IResponse";
 import { errorToast } from "./toast_service";
 import { getUserInfo } from "./session_service";
 
-export async function getUserChats(): Promise<IResponse> {
+export async function getUserChats(): Promise<IResponse<any>> {
     try {
         const req = await axiosConfig.get(`/chats/${getUserInfo().id}`);
 
@@ -23,7 +23,7 @@ export async function getUserChats(): Promise<IResponse> {
     }
 }
 
-export async function deleteUserChats(): Promise<IResponse> {
+export async function deleteUserChats(): Promise<IResponse<any>> {
     try {
         const req = await axiosConfig.delete(`/chats/${getUserInfo().id}`);
 

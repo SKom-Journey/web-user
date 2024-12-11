@@ -2,7 +2,7 @@ import axiosConfig from "@/config/axios";
 import { IResponse } from "@/interfaces/IResponse";
 import { errorToast } from "./toast_service";
 
-export async function getQrs(): Promise<IResponse> {
+export async function getQrs(): Promise<IResponse<any>> {
     try {
         const req = await axiosConfig.get("/qrs");
 
@@ -22,7 +22,7 @@ export async function getQrs(): Promise<IResponse> {
     }
 }
 
-export async function deleteQr(id: string): Promise<IResponse> {
+export async function deleteQr(id: string): Promise<IResponse<any>> {
     try {
         const req = await axiosConfig.delete(`/qrs/${id}`);
 
@@ -42,7 +42,7 @@ export async function deleteQr(id: string): Promise<IResponse> {
     }
 }
 
-export async function createQr(number: string): Promise<IResponse> {
+export async function createQr(number: string): Promise<IResponse<any>> {
     try {
         const req = await axiosConfig.post("/qrs", {
             table_number: number

@@ -21,13 +21,13 @@ interface ChatMessageComponentProps {
     triggerClearChat: boolean;
 }
 
-export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({ 
-    setTriggerClearChat, 
-    commandToChatbot, 
-    setIsWSConnected, 
-    isWSConnected, 
-    setShowRecommendedCommands, 
-    triggerClearChat 
+export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
+    setTriggerClearChat,
+    commandToChatbot,
+    setIsWSConnected,
+    isWSConnected,
+    setShowRecommendedCommands,
+    triggerClearChat
 }) => {
     const [chats, setChats] = useState<IChat[]>([]);
     const [carts, setCarts] = useState<ICart[]>([]);
@@ -42,12 +42,12 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
         getCarts();
         getChats();
 
-        const connectToSocket = io(websocketConfig.baseUrl, {autoConnect: true, transports: ['websocket']});
+        const connectToSocket = io(websocketConfig.baseUrl, { autoConnect: true, transports: ['websocket'] });
         socket.current = connectToSocket;
-        
+
         // Listen if the connection success
         connectToSocket.on('connect', () => {
-          setIsWSConnected(true);
+            setIsWSConnected(true);
         });
 
         // Listen for connection errors
@@ -55,20 +55,20 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
             console.error('Connection Error: ', error);
             setIsWSConnected(false);
         });
-  
+
         // Optionally, listen for a failed connection attempt
         connectToSocket.on('connect_failed', () => {
             console.error('Connection failed');
             setIsWSConnected(false);
         });
-        
+
         // Listen for the recommendation response
-        connectToSocket.on(websocketConfig.menuRecommendation.on, (data: IResponse) => {
+        connectToSocket.on(websocketConfig.menuRecommendation.on, (data: IResponse<any>) => {
             setChats(chats => [...chats, data.data[0]]);
             setIsLoading(false);
             scrollToBottom();
         });
-        
+
         // Cleanup the WebSocket connection when the component unmounts
         return () => {
             connectToSocket.disconnect();
@@ -76,16 +76,16 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
     }, []);
 
     useEffect(() => {
-        if(triggerClearChat) {
+        if (triggerClearChat) {
             setChats([]);
             setShowRecommendedCommands(true);
             setTriggerClearChat(false);
             deleteUserChats();
         }
     }, [triggerClearChat]);
-    
+
     useEffect(() => {
-        if(commandToChatbot.length > 0) {
+        if (commandToChatbot.length > 0) {
             socket.current?.emit(websocketConfig.menuRecommendation.emit, commandToChatbot, getUserInfo().id);
             setLastCommand(commandToChatbot);
             setIsLoading(true);
@@ -94,10 +94,10 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
     }, [commandToChatbot]);
 
     useEffect(() => {
-        if(cartUpdated) {
+        if (cartUpdated) {
             getCarts();
         }
-     }, [cartUpdated])
+    }, [cartUpdated])
 
     function scrollToBottom() {
         setTimeout(() => {
@@ -108,11 +108,11 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
     async function getChats() {
         const chats = await getUserChats();
         setChats(chats.data);
-        if(chats.data.length === 0) {
+        if (chats.data.length === 0) {
             setShowRecommendedCommands(true);
         }
     }
-    
+
     async function getCarts() {
         setCartUpdating(true);
         const carts = await getCartsByUserId();
@@ -147,9 +147,9 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
                     </div>
                 )
             }
-            
+
             {
-                chats.map((c, i ) => <>
+                chats.map((c, i) => <>
                     <div key={i} className="flex flex-col space-y-4 px-3 py-5 mb-15">
                         <Fragment>
                             <div className="flex justify-end">
@@ -172,12 +172,12 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
                                             c.menus.length === 0 && <>Sorry we dont have anything that you requested...</>
                                         }
                                     </div>
-                                    
+
                                     {
                                         c.menus.length > 0 && (
                                             <div className="mt-3">
                                                 {
-                                                    c.menus && c.menus.map((menu, idx) => 
+                                                    c.menus && c.menus.map((menu, idx) =>
                                                         // TODO REDIRECT TO DETAIL PAGE
                                                         <div key={idx} className="flex rounded-lg border-2 shadow h-20 mt-2">
                                                             <a className="w-full flex hover:bg-slate-200" href="#">
@@ -227,5 +227,5 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
 
             <div ref={messagesEndRef}></div>
         </div>
-   )
+    )
 }
