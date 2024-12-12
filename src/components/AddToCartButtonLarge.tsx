@@ -70,11 +70,11 @@ const AddToCartButtonLarge: FC<AddToCartButtonProps> = ({ menuId, cart, setCartU
 
         {
             inputMode && 
-                <div className="flex justify-center items-center justify-between text-xl">
+                <div className="flex justify-center items-center justify-between text-xl border-red-700 border-2 rounded-full px-4 pt-3 pb-2">
                     <button type="button" onClick={decrementTotalInput} className="my-auto" title="Remove from cart" disabled={isLoading}>
                         <CircleMinusIcon />
                     </button>
-                    <div className="mx-1.5 font-semibold">
+                    <div className="font-semibold">
                         {
                             isLoading
                                 ? <Spinnner size="sm" />
