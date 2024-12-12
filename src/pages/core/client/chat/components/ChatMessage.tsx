@@ -11,6 +11,7 @@ import { getUserInfo } from "@/services/session_service";
 import { deleteUserChats, getUserChats } from "@/services/chat_service";
 import { IChat } from "@/interfaces/IChat";
 import { getCartsByUserId } from "@/services/cart_service";
+import { Link } from "react-router-dom";
 
 interface ChatMessageComponentProps {
     commandToChatbot: string;
@@ -178,9 +179,8 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
                                             <div className="mt-3">
                                                 {
                                                     c.menus && c.menus.map((menu, idx) =>
-                                                        // TODO REDIRECT TO DETAIL PAGE
                                                         <div key={idx} className="flex rounded-lg border-2 shadow h-20 mt-2">
-                                                            <a className="w-full flex hover:bg-slate-200" href="#">
+                                                            <Link to={`/detail/${menu.id}`} className="w-full flex hover:bg-slate-200">
                                                                 <div className="w-6/12 p-1.5">
                                                                     <img className="rounded h-full w-full object-cover" src={menu.img} alt="Menu Img" />
                                                                 </div>
@@ -188,7 +188,7 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
                                                                     <div className="text-sm font-semibold">{truncateText(menu.title, 25)}</div>
                                                                     <div className="mt-1 text-xs text-slate-500">{truncateText(menu.description, 55)}</div>
                                                                 </div>
-                                                            </a>
+                                                            </Link>
                                                             <div className={`flex px-2 items-center justify-center`}>
                                                                 <AddToCartButton menu={menu} key={i} carts={carts} cartUpdating={cartUpdating} setCartUpdated={setCartUpdated} />
                                                             </div>

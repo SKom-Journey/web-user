@@ -77,7 +77,7 @@ export default function MenuList() {
             <input value={value} onChange={(e) => setValue(e.target.value)} type="search" placeholder="Craving for something?" className={`${TextInputSM} outline-none ml-2`} />
          </div>
 
-         <div className="overflow-y-auto" style={{scrollbarWidth: "thin", maxHeight: '94%'}}>
+         <div className="overflow-y-auto h-full" style={{scrollbarWidth: "thin", maxHeight: '94%'}}>
             {
                isLoading && 
                   <div className="h-full flex items-center justify-center">
