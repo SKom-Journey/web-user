@@ -1,11 +1,20 @@
 import { ArrowLeftIcon } from "@/components/Icons"
 import Logo from "@/assets/images/ryomu-logo.png"
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { checkUserSession } from "@/services/session_service";
 
 interface NavbarProps {
    title: string
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ title }) => {
+   const [showImg, setShowImg] = useState(false);
+
+   useEffect(() => {
+      setShowImg(checkUserSession());
+   });
+
    function back() {
       history.back();
    }
@@ -17,9 +26,17 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
                <ArrowLeftIcon />
             </button>
             <p className="font-semibold">{title}</p>
-            <a href="#" className="flex items-center">
-               <img src={Logo} className="h-8" alt="Flowbite Logo" />
-            </a>
+            <div>
+               {
+                  showImg && 
+                     <Link to='me' className="flex items-center">
+                        <img src={Logo} className="h-8" alt="Flowbite Logo" />
+                     </Link>
+               }
+               {
+                  !showImg && <>&nbsp;</>
+               }
+            </div>
          </div>
       </nav>
    )

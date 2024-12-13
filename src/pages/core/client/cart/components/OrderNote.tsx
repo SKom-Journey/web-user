@@ -47,7 +47,7 @@ const OrderNote: FC<OrderNoteProps> = ({
             <div className="mr-1">Note:</div>
             <div className="w-full truncate">
                 {
-                    editMode && <input className={`border ${TextInputSM}`} type="text" defaultValue={note} ref={noteRef} />
+                    editMode && <input autoFocus className={`border ${TextInputSM}`} type="text" defaultValue={note} ref={noteRef} />
                 }
 
                 {

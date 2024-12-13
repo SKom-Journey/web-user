@@ -151,7 +151,7 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
 
             {
                 chats.map((c, i) => <>
-                    <div key={i} className="flex flex-col space-y-4 px-3 py-5 mb-15">
+                    <div key={`${i}-user-message`} className="flex flex-col space-y-4 px-3 py-5 mb-15">
                         <Fragment>
                             <div className="flex justify-end">
                                 <div className="max-w-xs bg-blue-500 text-white p-3 rounded-lg rounded-br-none shadow text-sm">
@@ -179,7 +179,7 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
                                             <div className="mt-3">
                                                 {
                                                     c.menus && c.menus.map((menu, idx) =>
-                                                        <div key={idx} className="flex rounded-lg border-2 shadow h-20 mt-2">
+                                                        <div key={`${idx}-menu-message`} className="flex rounded-lg border-2 shadow h-20 mt-2">
                                                             <Link to={`/detail/${menu.id}`} className="w-full flex hover:bg-slate-200">
                                                                 <div className="w-6/12 p-1.5">
                                                                     <img className="rounded h-full w-full object-cover" src={menu.img} alt="Menu Img" />
@@ -190,7 +190,7 @@ export const ChatMessageComponent: FC<ChatMessageComponentProps> = ({
                                                                 </div>
                                                             </Link>
                                                             <div className={`flex px-2 items-center justify-center`}>
-                                                                <AddToCartButton menu={menu} key={i} carts={carts} cartUpdating={cartUpdating} setCartUpdated={setCartUpdated} />
+                                                                <AddToCartButton menu={menu} carts={carts} cartUpdating={cartUpdating} setCartUpdated={setCartUpdated} />
                                                             </div>
                                                         </div>
                                                     )

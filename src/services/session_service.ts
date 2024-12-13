@@ -17,3 +17,8 @@ export function storeSession(info: any, token: string) {
 export function getUserInfo() {
     return JSON.parse(localStorage.getItem('info') ?? "{}");
 }
+
+export function clearSession() {
+    localStorage.clear();
+    sessionStorage.clear();
+}
