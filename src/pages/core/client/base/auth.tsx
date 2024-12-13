@@ -9,7 +9,7 @@ export const AuthClient: React.FC = () => {
 
    useEffect(() => {
       if(!checkTableNumber()) {
-         navigate("/scan-table");
+         navigate("/static/scan-table");
       } else if(checkUserSession()) {
          navigate("/menu");
       }

@@ -12,6 +12,7 @@ const titleMapping: { [key: string]: string } = {
    '/menu': 'Menu',
    '/chat': 'Chatbot',
    '/cart': 'Cart',
+   '/me': 'Profile',
    '/order-success': 'Order Placed',
    '*': 'Not Found',
 };
@@ -30,7 +31,7 @@ export const Base: React.FC = () => {
       }
 
       if(!checkTableNumber()) {
-         navigate("/scan-table");
+         navigate("/static/scan-table");
       } else if(!checkUserSession()) {
          navigate("/auth/login");
       }
@@ -45,7 +46,7 @@ export const Base: React.FC = () => {
       }
    }, [contentRef]);
 
-   const hideMenubar = ['/chat', '/cart'].includes(location.pathname)
+   const hideMenubar = ['/chat', '/cart', '/me'].includes(location.pathname);
 
    return (
       <>

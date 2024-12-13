@@ -10,11 +10,15 @@ import { QrPageAdmin } from "@/pages/core/admin/qr";
 import { IncomingOrderPageAdmin } from "@/pages/core/admin/order";
 import { CategoryPageAdmin } from "@/pages/core/admin/category";
 import { MenuPageAdmin } from "@/pages/core/admin/menu";
-import OrderSuccessPage from "@/pages/core/client/message/OrderSuccessPage";
+import OrderSuccessPage from "@/pages/core/client/menus/components/OrderSuccessPage";
 import { AuthAdmin } from "@/pages/core/admin/base/auth";
 import LoginAdminPage from "@/pages/core/admin/auth/LoginAdminPage";
 import Detail from "@/pages/core/client/base/detail";
 import MenuDetail from "@/pages/core/client/menus/components/MenuDetail";
+import ScanTablePage from "@/pages/core/client/static/ScanTablePage";
+import ProfilePage from "@/pages/core/client/profile";
+import ThankYouPage from "@/pages/core/client/static/ThankYouPage";
+import Static from "@/pages/core/client/base/static";
 
 const router = createBrowserRouter([
    {
@@ -38,6 +42,10 @@ const router = createBrowserRouter([
          {
             index: true,
             element: <Navigate to="/menu" />
+         },
+         {
+            path: 'me',
+            element: <ProfilePage />,
          },
          {
             path: 'menu',
@@ -118,6 +126,24 @@ const router = createBrowserRouter([
             element: <MenuPageAdmin />
          }
       ],
+   },
+   {
+      path: '/static',
+      element: <Static />,
+      children: [
+         {
+            index: true,
+            element: <Navigate to="thank-you" />,
+         },
+         {
+            path: 'thank-you',
+            element: <ThankYouPage />
+         },
+         {
+            path: 'scan-table',
+            element: <ScanTablePage />,
+         },
+      ]
    }
 ]);
 
