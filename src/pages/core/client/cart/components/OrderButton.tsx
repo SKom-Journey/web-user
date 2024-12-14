@@ -6,6 +6,8 @@ import { createOrder } from "@/services/order_service";
 import { getUserInfo } from "@/services/session_service";
 import { getTableNumber } from "@/services/table_service";
 import { successToast } from "@/services/toast_service";
+import { create_transaction } from "@/services/transaction_service";
+import displayTransactionPopup from "@/utils/display_transaction_popup";
 import localizeNumber from "@/utils/localize_number";
 import { FC, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -23,10 +25,6 @@ export const OrderButton: FC<OrderButtonComponentProps> = ({
     const [disabled, setDisabled] = useState(false);
     const timer = useRef<NodeJS.Timeout | null>(null);
     const interval = useRef<NodeJS.Timeout | null>(null);
-
-    useEffect(() => {
-        // displayTransactionModal();
-    }, []);
 
     if (orders.length === 0) {
         return null;
@@ -76,29 +74,18 @@ export const OrderButton: FC<OrderButtonComponentProps> = ({
             });
         }
 
-        await createOrder(data);
-        navigate('/order-success');
-        successToast("Order Placed Successfully!")
-    }
+        // TODO HANDLE IF CASH OR CASHLESS
+        displayTransactionModal();
 
+        // await createOrder(data);
+        // navigate('/order-success');
+        successToast("Order Placed Successfully!");
+    }
+    
     async function displayTransactionModal() {
-        window.snap.pay("d2ce7096-1307-4d80-82f7-bb0a42337ae2", {
-            onSuccess: function (result) {
-                alert("Payment Successful!");
-                console.log("Success:", result);
-            },
-            onPending: function (result) {
-                alert("Payment Pending.");
-                console.log("Pending:", result);
-            },
-            onError: function (result) {
-                alert("Payment Failed.");
-                console.log("Error:", result);
-            },
-            onClose: function () {
-                alert("Payment modal closed.");
-            },
-        });
+        const trans = await create_transaction();
+        console.warn(trans.data);
+        displayTransactionPopup(trans.data.token);
     }
 
     return (
@@ -117,7 +104,7 @@ export const OrderButton: FC<OrderButtonComponentProps> = ({
 
             {!loading && (
                 <span>
-                    Order - Rp.{localizeNumber(orders.reduce((a, b) => a + b.menu!.price, 0))}
+                    Order - Rp.{localizeNumber(orders.reduce((a, b) => a + b.menu!.price * b.quantity, 0))}
                 </span>
             )}
         </button>

@@ -64,7 +64,7 @@ export const OrderSummary: FC<OrderSummaryComponentProps> = ({
             <div className="text-lg flex font-bold mt-1 text-green-500 mt-6">
                 <div className="w-full">Subtotal</div>
                 <div className="w-1/12"></div>
-                <div className="w-4/12 text-right">Rp.{localizeNumber(orders.reduce((a, b) => a + b.menu!.price, 0))}</div>
+                <div className="w-4/12 text-right">Rp.{localizeNumber(orders.reduce((a, b) => a + b.menu!.price * b.quantity, 0))}</div>
             </div>
         </div>
     )
