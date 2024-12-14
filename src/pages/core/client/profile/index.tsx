@@ -5,14 +5,25 @@ import { ButtonLarge } from '@/config/theme';
 import { clearSession } from '@/services/session_service';
 import { useNavigate } from 'react-router-dom';
 import { successToast } from '@/services/toast_service';
+import { getProfile } from '@/services/profile_service';
+import { useEffect } from 'react';
 
 export default function ProfilePage() {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        getProfileData();
+    }, []);
     
     async function logout() {
         clearSession();
         navigate("/static/thank-you");
         successToast('Logout Success!');
+    }
+
+    async function getProfileData() {
+        const data = await getProfile();
+        console.warn(data.data);
     }
 
     return(
