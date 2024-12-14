@@ -7,7 +7,7 @@ import { getUserInfo } from "@/services/session_service";
 import { getTableNumber } from "@/services/table_service";
 import { successToast } from "@/services/toast_service";
 import localizeNumber from "@/utils/localize_number";
-import { FC, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface OrderButtonComponentProps {
@@ -23,6 +23,10 @@ export const OrderButton: FC<OrderButtonComponentProps> = ({
     const [disabled, setDisabled] = useState(false);
     const timer = useRef<NodeJS.Timeout | null>(null);
     const interval = useRef<NodeJS.Timeout | null>(null);
+
+    useEffect(() => {
+        // displayTransactionModal();
+    }, []);
 
     if (orders.length === 0) {
         return null;
@@ -75,6 +79,26 @@ export const OrderButton: FC<OrderButtonComponentProps> = ({
         await createOrder(data);
         navigate('/order-success');
         successToast("Order Placed Successfully!")
+    }
+
+    async function displayTransactionModal() {
+        window.snap.pay("d2ce7096-1307-4d80-82f7-bb0a42337ae2", {
+            onSuccess: function (result) {
+                alert("Payment Successful!");
+                console.log("Success:", result);
+            },
+            onPending: function (result) {
+                alert("Payment Pending.");
+                console.log("Pending:", result);
+            },
+            onError: function (result) {
+                alert("Payment Failed.");
+                console.log("Error:", result);
+            },
+            onClose: function () {
+                alert("Payment modal closed.");
+            },
+        });
     }
 
     return (
