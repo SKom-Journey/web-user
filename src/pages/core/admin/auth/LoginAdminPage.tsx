@@ -14,7 +14,7 @@ export default function LoginAdminPage() {
         e.preventDefault();
         const req = await loginAdmin(usernameRef.current!.value, passwordRef.current!.value);
         if(!req.error) {
-            storeSession(req.data, "token");
+            storeSession(req.data);
             navigate("/admin");
         }
     }
