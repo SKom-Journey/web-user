@@ -16,17 +16,18 @@ axiosConfig.interceptors.response.use(
             if(data.status == 'SUCCESS') {
                 return axiosConfig(response.config);
             } else {
-                throw new Error('Session Invalid!')
+                errorToast('Session Invalid!');
+                localStorage.clear();
+                location.href = '/auth/login';
             }
         } else if(response.data.status == 'INVALID_TOKEN') {
-            throw new Error('Session Invalid!')
+            errorToast('Session Invalid!');
+            localStorage.clear();
+            location.href = '/auth/login';
         }
         return response;
     },
     (error) => {
-        errorToast('Session Invalid!');
-        localStorage.clear();
-        location.href = '/auth/login';
         return Promise.reject(error);
     }
 );

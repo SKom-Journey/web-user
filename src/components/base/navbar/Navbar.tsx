@@ -29,7 +29,7 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
             <div>
                {
                   showImg && 
-                     <Link to='me' className="flex items-center">
+                     <Link to='me' className="flex items-center" title="Profile">
                         <img src={Logo} className="h-8" alt="Flowbite Logo" />
                      </Link>
                }
