@@ -26,7 +26,7 @@ export default function RegisterPage() {
     const login = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
             const user = await loginWithGoogleOauth(tokenResponse.access_token);
-            storeSession(user.data, "token");
+            storeSession(user.data);
             navigate("/menu");
         },
         onError: (error) => {

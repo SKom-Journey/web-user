@@ -68,6 +68,26 @@ export async function loginWithGoogleOauth(accessToken: string): Promise<IRespon
     }
 }
 
+export async function refreshSession(): Promise<IResponse<any>> {
+    try {
+        const req = await axiosConfig.post("/auths/refresh");
+
+        if(req.data.error) {
+            errorToast(req.data.data);
+        }
+
+        return req.data;
+    } catch (error) {
+        console.error(error);
+        errorToast();
+        return {
+            data: null,
+            error: true,
+            status: "ERROR"
+        }
+    }
+}
+
 export async function loginAdmin(username: string, password: string): Promise<IResponse<any>> {
     try {
         const req = await axiosConfig.post("/auths/admins/login", {

@@ -18,7 +18,7 @@ export default function LoginUserPage() {
         const req = await login(emailRef.current?.value!, pwdRef.current?.value!);
 
         if(!req.error) {
-            storeSession(req.data, "token");
+            storeSession(req.data);
             navigate("/menu");
         }
     }
@@ -26,7 +26,7 @@ export default function LoginUserPage() {
     const loginWithGoogle = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
             const user = await loginWithGoogleOauth(tokenResponse.access_token);
-            storeSession(user.data, "token");
+            storeSession(user.data);
             navigate("/menu");
         },
         onError: (error) => {

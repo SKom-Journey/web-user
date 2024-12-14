@@ -66,7 +66,6 @@ export async function getMenuById(id: string) {
         const req = await axiosConfig.get(`/menus/${id}`);
         return req.data;
     } catch (error) {
-        console.warn(error);
         errorToast();
         return {
             data: null,

@@ -1,16 +1,13 @@
 export function checkUserSession() {
-    const token = localStorage.getItem('token');
-    
+    const token = localStorage.getItem('info');
     if(token == null) {
         localStorage.clear();
         return false;
     }
-
     return true;
 }
 
-export function storeSession(info: any, token: string) {
-    localStorage.setItem('token', token);
+export function storeSession(info: any) {
     localStorage.setItem('info', JSON.stringify(info));
 }
 

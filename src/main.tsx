@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -14,11 +13,9 @@ const queryClient = new QueryClient()
 Modal.setAppElement('#wrapper');
 
 createRoot(document.getElementById('wrapper')!).render(
-  <StrictMode>
-      <QueryClientProvider client={queryClient} >
-        <GoogleOAuthProvider clientId={oauthConfig.clientId}>
-          <RouterProvider router={router} />
-        </GoogleOAuthProvider>
-      </QueryClientProvider>
-  </StrictMode>,
+  <QueryClientProvider client={queryClient} >
+    <GoogleOAuthProvider clientId={oauthConfig.clientId}>
+      <RouterProvider router={router} />
+    </GoogleOAuthProvider>
+  </QueryClientProvider>,
 )
