@@ -9,15 +9,17 @@ import { successToast } from "@/services/toast_service";
 import { create_transaction } from "@/services/transaction_service";
 import displayTransactionPopup from "@/utils/display_transaction_popup";
 import localizeNumber from "@/utils/localize_number";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface OrderButtonComponentProps {
     orders: ICart[];
+    paymentType: string;
 }
 
 export const OrderButton: FC<OrderButtonComponentProps> = ({
-    orders
+    orders,
+    paymentType
 }) => {
     const navigate = useNavigate();
     const [seconds, setSeconds] = useState(4);
@@ -74,17 +76,17 @@ export const OrderButton: FC<OrderButtonComponentProps> = ({
             });
         }
 
-        // TODO HANDLE IF CASH OR CASHLESS
-        displayTransactionModal();
-
-        // await createOrder(data);
-        // navigate('/order-success');
-        successToast("Order Placed Successfully!");
+        if(paymentType == 'cash') {
+            await createOrder(data);
+            navigate('/order-success');
+            successToast("Order Placed Successfully!");
+        } else if(paymentType == 'cashless') {
+            displayTransactionModal();
+        }
     }
     
     async function displayTransactionModal() {
         const trans = await create_transaction();
-        console.warn(trans.data);
         displayTransactionPopup(trans.data.token);
     }
 

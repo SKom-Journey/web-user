@@ -1,4 +1,4 @@
-import { Dispatch, FC, Fragment, SetStateAction, useEffect } from "react";
+import { Dispatch, FC, Fragment, SetStateAction } from "react";
 import CartSVG from "@/assets/svg/cart.svg";
 import { ICart } from "@/interfaces/ICart";
 import localizeNumber from "@/utils/localize_number";
@@ -16,11 +16,6 @@ export const OrderSummary: FC<OrderSummaryComponentProps> = ({
     orderLoading,
     orders
 }) => {
-    
-    useEffect(() => {
-        // console.log(orders);
-    }, []);
-
     if(orders.length === 0 && !orderLoading) {
         return (
             <div className="py-8 shadow-lg rounded-lg border p-3 font-bold mt-5 flex flex-wrap items-center justify-center">

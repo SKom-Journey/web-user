@@ -32,7 +32,7 @@ const Confirm: React.FC<ConfirmProps> = ({
             <center className="rounded-lg bg-white shadow-lg p-8">
                 <div className="font-bold text-xl">{title}</div>
                 <div className="mt-8">
-                    <Button className="rounded-lg bg-red-400" title="No" onClick={onCancel}>No</Button>
+                    <Button className="rounded-lg bg-white text-black hover:text-white" title="No" onClick={onCancel}>No</Button>
                     <Button className="rounded-lg bg-red-600 ml-5" title="Yes" onClick={onProceed}>Yes</Button>
                 </div>
             </center>
