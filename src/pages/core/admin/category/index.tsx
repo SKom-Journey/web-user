@@ -1,5 +1,9 @@
+import CategoryDataTable from "./components/CategoryDataTable"
+
 export const CategoryPageAdmin = () => {
    return (
-      <h1>Manage Category</h1>
+      <div>
+         <CategoryDataTable />
+      </div>
    )
 }
