@@ -12,7 +12,14 @@ export function storeSession(info: any) {
 }
 
 export function getUserInfo() {
-    return JSON.parse(localStorage.getItem('info') ?? "{}");
+    const userInfo = localStorage.getItem('info');
+    if(userInfo == 'null') {
+        clearSession();
+        location.href = '/auth/login';
+        return;
+    }
+
+    return JSON.parse(userInfo ?? "{}");
 }
 
 export function clearSession() {

@@ -1,4 +1,4 @@
-import { Dispatch, FC, Fragment, SetStateAction, useEffect } from "react";
+import { Dispatch, FC, Fragment, SetStateAction } from "react";
 import CartSVG from "@/assets/svg/cart.svg";
 import { ICart } from "@/interfaces/ICart";
 import localizeNumber from "@/utils/localize_number";
@@ -16,11 +16,6 @@ export const OrderSummary: FC<OrderSummaryComponentProps> = ({
     orderLoading,
     orders
 }) => {
-    
-    useEffect(() => {
-        // console.log(orders);
-    }, []);
-
     if(orders.length === 0 && !orderLoading) {
         return (
             <div className="py-8 shadow-lg rounded-lg border p-3 font-bold mt-5 flex flex-wrap items-center justify-center">
@@ -64,7 +59,7 @@ export const OrderSummary: FC<OrderSummaryComponentProps> = ({
             <div className="text-lg flex font-bold mt-1 text-green-500 mt-6">
                 <div className="w-full">Subtotal</div>
                 <div className="w-1/12"></div>
-                <div className="w-4/12 text-right">Rp.{localizeNumber(orders.reduce((a, b) => a + b.menu!.price, 0))}</div>
+                <div className="w-4/12 text-right">Rp.{localizeNumber(orders.reduce((a, b) => a + b.menu!.price * b.quantity, 0))}</div>
             </div>
         </div>
     )

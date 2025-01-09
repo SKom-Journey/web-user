@@ -37,7 +37,7 @@ export const createMenus = async (menuData: IMenu) => {
        errorToast(); 
        throw error; 
     }
-} 
+}
 
 export const updateMenus = async (menu_id: string,menuData: IMenu) => {
     try {
@@ -58,6 +58,34 @@ export const deleteMenus = async (menu_id: string) => {
         console.error(error);
         errorToast(); 
         throw error; 
+    }
+}
+
+export async function getMenuOutsideCategory(categoryId: string) {
+    try {
+        const req = await axiosConfig.get(`/menus/outside-categories/${categoryId}`);
+        return req.data;
+    } catch (error) {
+        errorToast();
+        return {
+            data: null,
+            error: true,
+            status: "ERROR"
+        }
+    }
+}
+
+export async function getMenuByCategory(categoryId: string) {
+    try {
+        const req = await axiosConfig.get(`/menus/categories/${categoryId}`);
+        return req.data;
+    } catch (error) {
+        errorToast();
+        return {
+            data: null,
+            error: true,
+            status: "ERROR"
+        }
     }
 }
 

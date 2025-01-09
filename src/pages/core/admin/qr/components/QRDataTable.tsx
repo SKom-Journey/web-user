@@ -69,7 +69,7 @@ export default function QRDataTable() {
             onRequestClose={() => setOpenModal(false)}
             style={ModalSM}
          >
-            <button onMouseEnter={() => setShowPrintOverlay(true)} onMouseLeave={() => setShowPrintOverlay(false)}  className="relative p-10 text-center" onClick={handlePrint}>
+            <button onMouseEnter={() => setShowPrintOverlay(true)} onMouseLeave={() => setShowPrintOverlay(false)} className="relative p-10 text-center" onClick={handlePrint}>
                <div className={`${showPrintOverlay ? "absolute" : "hidden"} absolute top-0 bottom-0 right-0 left-0 bg-black flex items-center justify-center opacity-80`}>
                   <div className="text-white text-center">
                      <PrinterIcon size={80} className="m-auto" />
