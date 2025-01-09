@@ -26,8 +26,8 @@ export default function CategoryDataTable() {
    const [showForm, setShowForm] = useState<boolean>(false);
    const [openModal, setOpenModal] = useState<boolean>(false);
    const [markedCategories, setMarkedCategories] = useState<string[]>([]);
-   const [categoryValue, setCategoryValue] = useState<string>("");
-   const [selectedCategory, setSelectedCategory] = useState<string>("");
+   const [_, setCategoryValue] = useState<string>("");
+   const [__, setSelectedCategory] = useState<string>("");
 
     useEffect(() => {
         setupData();
