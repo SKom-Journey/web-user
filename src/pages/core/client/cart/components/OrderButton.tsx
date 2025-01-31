@@ -6,7 +6,7 @@ import { createOrder } from "@/services/order_service";
 import { getUserInfo } from "@/services/session_service";
 import { getTableNumber } from "@/services/table_service";
 import { successToast } from "@/services/toast_service";
-import { create_transaction } from "@/services/transaction_service";
+import { createTransaction } from "@/services/transaction_service";
 import displayTransactionPopup from "@/utils/display_transaction_popup";
 import localizeNumber from "@/utils/localize_number";
 import { FC, useRef, useState } from "react";
@@ -77,17 +77,26 @@ export const OrderButton: FC<OrderButtonComponentProps> = ({
         }
 
         if(paymentType == 'cash') {
-            await createOrder(data);
-            navigate('/order-success');
-            successToast("Order Placed Successfully!");
+            await createPayment(data);
         } else if(paymentType == 'cashless') {
-            displayTransactionModal();
+            displayTransactionModal(data);
+            setDisabled(false);
         }
     }
     
-    async function displayTransactionModal() {
-        const trans = await create_transaction();
-        displayTransactionPopup(trans.data.token);
+    async function createPayment(data: IOrder) {
+        await createOrder(data);
+        navigate('/order-success');
+        successToast("Order Placed Successfully!");
+    }
+    
+    async function displayTransactionModal(data: IOrder) {
+        const trans = await createTransaction();
+        const transaction = await displayTransactionPopup(trans.data.token);
+        console.log(transaction);
+        if(transaction.fraud_status == 'accept') {
+            await createPayment(data);
+        }
     }
 
     return (

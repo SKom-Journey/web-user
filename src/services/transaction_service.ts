@@ -2,7 +2,7 @@ import axiosConfig from "@/config/axios";
 import { errorToast } from "./toast_service";
 import { getUserInfo } from "./session_service";
 
-export async function create_transaction() {
+export async function createTransaction() {
     try {
         const { id } = getUserInfo();
 
