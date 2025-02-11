@@ -18,7 +18,7 @@ interface FormChatComponentProps {
    const recommendedCommands: string[] = [
       "Give me something spicy",
       "I have a dairy allergy",
-      "how about a cold drink?"
+      "i have a seafood allergy"
    ]
 
    function onSubmit(e: FormEvent<HTMLFormElement>) {
